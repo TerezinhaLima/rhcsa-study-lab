@@ -222,6 +222,13 @@ const questoes = [
     }
 ];
 
+// ==================== SISTEMA DE PROGRESSO ====================
+let progresso = JSON.parse(localStorage.getItem('rhcsa-progresso')) || {};
+let tentativas = JSON.parse(localStorage.getItem('rhcsa-tentativas')) || {};
+let questaoAtual = null;
+
+// ==================== FUNÇÕES DE QUESTÕES ====================
+
 // Carregar questões na página - VERSÃO SIMPLIFICADA E FUNCIONAL
 function carregarQuestoes() {
     console.log('Função carregarQuestoes() executada');
@@ -274,13 +281,15 @@ function carregarQuestoes() {
     
     questoesFiltradas.forEach(questao => {
         const dificuldadeClass = `dificuldade-${questao.dificuldade.toLowerCase().replace('á', 'a').replace('í', 'i')}`;
+        const concluida = progresso[questao.id] || false;
+        const statusIcon = concluida ? '<i class="fas fa-check-circle text-success"></i>' : '<i class="fas fa-clock text-secondary"></i>';
         
         html += `
         <div class="col-md-6 col-lg-4">
-            <div class="questao-card" data-id="${questao.id}">
+            <div class="questao-card ${concluida ? 'questao-concluida' : ''}" data-id="${questao.id}">
                 <div class="questao-header">
                     <div>
-                        <h5 class="mb-1">Questão ${questao.id}</h5>
+                        <h5 class="mb-1">${statusIcon} Questão ${questao.id}</h5>
                         <small class="questao-id">Node ${questao.node} • ${questao.topico}</small>
                     </div>
                     <span class="dificuldade ${dificuldadeClass}">${questao.dificuldade}</span>
@@ -293,14 +302,15 @@ function carregarQuestoes() {
                     <button class="btn btn-sm btn-outline-primary ver-detalhes" data-id="${questao.id}">
                         <i class="fas fa-eye"></i> Ver Detalhes
                     </button>
-                    <a href="terminal.html?questao=${questao.id}" class="btn btn-sm btn-terminal ms-2">
-                        <i class="fas fa-terminal"></i> Abrir Terminal
-                    </a>
+                    <button class="btn btn-sm btn-terminal ms-2" onclick="abrirTerminalParaQuestao(${questao.id})">
+                        <i class="fas fa-terminal"></i> Terminal
+                    </button>
                 </div>
                 
-                <div class="progress mt-3" style="display: none;">
-                    <div class="progress-bar" role="progressbar" style="width: 0%"></div>
-                </div>
+                ${concluida ? 
+                    '<div class="progress mt-3"><div class="progress-bar bg-success" style="width: 100%">Concluído ✓</div></div>' : 
+                    '<div class="progress mt-3" style="display: none;"><div class="progress-bar" style="width: 0%"></div></div>'
+                }
             </div>
         </div>
         `;
@@ -319,16 +329,39 @@ function carregarQuestoes() {
     console.log('Questões carregadas com sucesso!');
 }
 
+function abrirTerminalParaQuestao(id) {
+    // Mudar para a aba do terminal
+    const terminalTab = document.getElementById('terminal-tab');
+    if (terminalTab) {
+        terminalTab.click();
+    }
+    
+    // Atualizar o dropdown de verificação
+    const select = document.getElementById('questao-verificar');
+    if (select) {
+        select.value = id;
+    }
+    
+    // Mostrar mensagem no terminal
+    const questao = questoes.find(q => q.id == id);
+    if (questao) {
+        setTimeout(() => {
+            adicionarSaidaTerminal(`🔍 Praticando Questão ${id}: ${questao.titulo}`, 'info');
+            adicionarSaidaTerminal(`📝 Objetivo: ${questao.descricao}`, 'info');
+        }, 500);
+    }
+}
+
 // Mostrar detalhes da questão
 function mostrarDetalhesQuestao(id) {
-    const questao = questoes.find(q => q.id == id);
+    questaoAtual = questoes.find(q => q.id == id);
     
-    if (!questao) {
+    if (!questaoAtual) {
         alert('Questão não encontrada!');
         return;
     }
     
-    // Criar modal simples (sem Bootstrap para evitar dependências)
+    // Criar modal
     const modalHTML = `
         <div id="modal-questao" style="
             position: fixed;
@@ -352,7 +385,7 @@ function mostrarDetalhesQuestao(id) {
                 overflow-y: auto;
             ">
                 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-                    <h4>Questão ${questao.id}: ${questao.titulo}</h4>
+                    <h4>Questão ${questaoAtual.id}: ${questaoAtual.titulo}</h4>
                     <button onclick="document.getElementById('modal-questao').remove()" style="
                         background: none;
                         border: none;
@@ -362,27 +395,27 @@ function mostrarDetalhesQuestao(id) {
                 </div>
                 
                 <div style="margin-bottom: 15px;">
-                    <p><strong>Node:</strong> ${questao.node} | 
-                       <strong>Tópico:</strong> ${questao.topico} | 
-                       <strong>Dificuldade:</strong> ${questao.dificuldade}</p>
+                    <p><strong>Node:</strong> ${questaoAtual.node} | 
+                       <strong>Tópico:</strong> ${questaoAtual.topico} | 
+                       <strong>Dificuldade:</strong> ${questaoAtual.dificuldade}</p>
                 </div>
                 
                 <div style="margin-bottom: 15px;">
                     <h6>Descrição:</h6>
-                    <p>${questao.descricao}</p>
+                    <p>${questaoAtual.descricao}</p>
                 </div>
                 
                 <div style="margin-bottom: 15px;">
                     <h6>Comando Sugerido:</h6>
                     <div style="background: #f8f9fa; padding: 10px; border-radius: 5px; font-family: monospace;">
-                        ${questao.comando}
+                        ${questaoAtual.comando}
                     </div>
                 </div>
                 
                 <div style="margin-bottom: 20px;">
                     <h6>Solução Esperada:</h6>
                     <div style="background: #e9ecef; padding: 10px; border-radius: 5px; white-space: pre-wrap;">
-                        ${questao.solucao}
+                        ${questaoAtual.solucao}
                     </div>
                 </div>
                 
@@ -396,16 +429,30 @@ function mostrarDetalhesQuestao(id) {
                         cursor: pointer;
                     ">Fechar</button>
                     
-                    <button onclick="marcarComoConcluida(${questao.id})" style="
-                        padding: 8px 16px;
-                        background: #007bff;
-                        color: white;
-                        border: none;
-                        border-radius: 5px;
-                        cursor: pointer;
-                    ">
-                        <i class="fas fa-check"></i> Marcar como Concluída
-                    </button>
+                    <div>
+                        <button onclick="testarQuestaoNoTerminal()" style="
+                            padding: 8px 16px;
+                            background: #28a745;
+                            color: white;
+                            border: none;
+                            border-radius: 5px;
+                            cursor: pointer;
+                            margin-right: 10px;
+                        ">
+                            <i class="fas fa-terminal"></i> Testar no Terminal
+                        </button>
+                        
+                        <button onclick="marcarComoConcluida(${questaoAtual.id})" style="
+                            padding: 8px 16px;
+                            background: #007bff;
+                            color: white;
+                            border: none;
+                            border-radius: 5px;
+                            cursor: pointer;
+                        ">
+                            <i class="fas fa-check"></i> Marcar Concluída
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -421,10 +468,34 @@ function mostrarDetalhesQuestao(id) {
     document.body.insertAdjacentHTML('beforeend', modalHTML);
 }
 
+function testarQuestaoNoTerminal() {
+    if (!questaoAtual) return;
+    
+    // Fechar modal
+    const modal = document.getElementById('modal-questao');
+    if (modal) {
+        modal.remove();
+    }
+    
+    // Ir para a aba do terminal
+    abrirTerminalParaQuestao(questaoAtual.id);
+    
+    // Limpar terminal
+    setTimeout(() => {
+        limparTerminal();
+        
+        // Mostrar instruções
+        adicionarSaidaTerminal(`🧪 TESTANDO QUESTÃO ${questaoAtual.id}: ${questaoAtual.titulo}`, 'info');
+        adicionarSaidaTerminal(`📋 Descrição: ${questaoAtual.descricao}`, 'info');
+        adicionarSaidaTerminal(`💡 Comando sugerido: ${questaoAtual.comando}`, 'info');
+        adicionarSaidaTerminal(`🚀 Execute os comandos acima para praticar.`, 'info');
+        adicionarSaidaTerminal(`✅ Depois use "Verificar Solução" para testar.`, 'info');
+    }, 300);
+}
+
 // Marcar questão como concluída
 function marcarComoConcluida(id) {
     // Salvar no localStorage
-    let progresso = JSON.parse(localStorage.getItem('rhcsa-progresso') || '{}');
     progresso[id] = true;
     localStorage.setItem('rhcsa-progresso', JSON.stringify(progresso));
     
@@ -439,6 +510,7 @@ function marcarComoConcluida(id) {
     
     // Recarregar questões para atualizar progresso
     carregarQuestoes();
+    atualizarProgressoVisual();
 }
 
 // Atualizar progresso visual
@@ -491,23 +563,6 @@ function configurarFiltros() {
     }
 }
 
-// Inicializar quando a página carregar
-document.addEventListener('DOMContentLoaded', function() {
-    console.log('Página carregada - iniciando RHCSA Study Lab');
-    
-    // Carregar questões
-    carregarQuestoes();
-    
-    // Configurar filtros
-    configurarFiltros();
-    
-    // Atualizar progresso visual
-    atualizarProgressoVisual();
-    
-    // Log de inicialização
-    console.log('RHCSA Study Lab inicializado com sucesso!');
-    console.log('Total de questões disponíveis:', questoes.length);
-});
 // ==================== SISTEMA DE COMANDOS AVANÇADO ====================
 const comandosTerminal = {
     // Comandos básicos
@@ -673,11 +728,75 @@ root         3  0.0  0.0      0     0 ?        I<   10:00   0:00 [rcu_gp]`,
 💡 DICA: Use TAB para auto-completar comandos!`
 };
 
-// Sistema de auto-completar com TAB
+// ==================== SISTEMA DE AUTO-COMPLETE E HISTÓRICO ====================
 let historicoComandos = [];
 let indiceHistorico = -1;
 
-// Função melhorada para executar comandos
+// ==================== FUNÇÕES AUXILIARES ====================
+
+// Função de distância Levenshtein para correção de erros de digitação
+function levenshteinDistance(a, b) {
+    const matrix = [];
+    for (let i = 0; i <= b.length; i++) {
+        matrix[i] = [i];
+    }
+    for (let j = 0; j <= a.length; j++) {
+        matrix[0][j] = j;
+    }
+    for (let i = 1; i <= b.length; i++) {
+        for (let j = 1; j <= a.length; j++) {
+            if (b.charAt(i - 1) === a.charAt(j - 1)) {
+                matrix[i][j] = matrix[i - 1][j - 1];
+            } else {
+                matrix[i][j] = Math.min(
+                    matrix[i - 1][j - 1] + 1,
+                    matrix[i][j - 1] + 1,
+                    matrix[i - 1][j] + 1
+                );
+            }
+        }
+    }
+    return matrix[b.length][a.length];
+}
+
+// ==================== SUGESTÃO DE CORREÇÃO DE COMANDOS ====================
+function sugerirCorrecao(comandoErrado) {
+    const correcoesComuns = {
+        'hostanmectl': 'hostnamectl',
+        'hostnameclt': 'hostnamectl',
+        'ifconfig': 'ip addr show',
+        'service httpd start': 'systemctl start httpd',
+        'chkconfig httpd on': 'systemctl enable httpd',
+        'iptables': 'firewall-cmd',
+        'user add': 'useradd',
+        'group add': 'groupadd',
+        'mkdir -p': 'mkdir',
+        'chown -R': 'chown',
+        'chmod -R': 'chmod',
+        'yast': 'nmcli',
+        'zypper': 'yum',
+        'apt-get': 'yum',
+        'apt': 'yum',
+        'systemctl stop NetworkManager': 'systemctl stop NetworkManager.service',
+        'systemctl start NetworkManager': 'systemctl start NetworkManager.service',
+        'nano': 'vim',
+        'netstat': 'ss',
+        'ifconfig -a': 'ip addr show',
+        'route -n': 'ip route show',
+        'service network restart': 'systemctl restart network'
+    };
+    
+    // Verificar por palavra-chave
+    for (let [erro, correcao] of Object.entries(correcoesComuns)) {
+        if (comandoErrado.toLowerCase().includes(erro.toLowerCase())) {
+            return `💡 Você quis dizer: "${correcao}"? (Em RHEL 8+, use "${correcao}" no lugar de "${erro}")`;
+        }
+    }
+    
+    return null;
+}
+
+// ==================== FUNÇÃO PRINCIPAL DO TERMINAL ====================
 function executarComando() {
     const input = document.getElementById('terminal-input');
     let comando = input.value.trim();
@@ -706,22 +825,24 @@ function executarComando() {
     
     // Verificar se comando existe (com aproximação para erros de digitação)
     let comandoEncontrado = null;
+    let sugestaoCorrecao = null;
     
     // Primeiro tentar match exato
     if (comandosTerminal[comando]) {
         comandoEncontrado = comando;
     } else {
+        // Verificar se há sugestão de correção para comandos comuns errados
+        sugestaoCorrecao = sugerirCorrecao(comando);
+        
         // Tentar encontrar comando similar (para lidar com erros de digitação)
         const comandosDisponiveis = Object.keys(comandosTerminal);
         for (let cmd of comandosDisponiveis) {
             if (cmd.startsWith(comando.split(' ')[0])) {
-                // Sugerir comando correto
-                if (comando.includes('hostanmectl')) {
-                    comandoEncontrado = cmd.replace('hostanmectl', 'hostnamectl');
-                    adicionarSaidaTerminal(`💡 Dica: O comando correto é "hostnamectl" (sem o 'n' extra)`, 'info');
-                } else if (cmd.includes(comando) || levenshteinDistance(cmd, comando) < 3) {
+                // Sugerir comando correto baseado em similaridade
+                if (levenshteinDistance(cmd, comando) < 3) {
                     comandoEncontrado = cmd;
                     adicionarSaidaTerminal(`💡 Você quis dizer: "${cmd}"?`, 'info');
+                    break;
                 }
             }
         }
@@ -737,6 +858,10 @@ function executarComando() {
         // Verificar se este comando corresponde a alguma questão
         verificarComandoQuestao(comandoEncontrado);
     } else {
+        // Mostrar sugestão de correção se houver
+        if (sugestaoCorrecao) {
+            adicionarSaidaTerminal(sugestaoCorrecao, 'hint');
+        }
         adicionarSaidaTerminal(`bash: ${comando}: comando não encontrado\nDigite 'help' para ajuda.`, 'error');
     }
     
@@ -744,32 +869,7 @@ function executarComando() {
     input.focus();
 }
 
-// Função de distância Levenshtein para correção de erros de digitação
-function levenshteinDistance(a, b) {
-    const matrix = [];
-    for (let i = 0; i <= b.length; i++) {
-        matrix[i] = [i];
-    }
-    for (let j = 0; j <= a.length; j++) {
-        matrix[0][j] = j;
-    }
-    for (let i = 1; i <= b.length; i++) {
-        for (let j = 1; j <= a.length; j++) {
-            if (b.charAt(i - 1) === a.charAt(j - 1)) {
-                matrix[i][j] = matrix[i - 1][j - 1];
-            } else {
-                matrix[i][j] = Math.min(
-                    matrix[i - 1][j - 1] + 1,
-                    matrix[i][j - 1] + 1,
-                    matrix[i - 1][j] + 1
-                );
-            }
-        }
-    }
-    return matrix[b.length][a.length];
-}
-
-// ==================== SISTEMA DE VERIFICAÇÃO INTELIGENTE ====================
+// ==================== COMANDOS EXECUTADOS E VERIFICAÇÃO ====================
 const solucoesQuestoes = {
     1: ['nmcli connection modify eth0', '192.168.1.100', 'ip addr show'],
     2: ['vim /etc/yum.repos.d/local.repo', 'baseurl=file:///mnt', 'yum repolist'],
@@ -826,7 +926,101 @@ function verificarComandoQuestao(comando) {
     }
 }
 
-// Função de verificação melhorada
+// ==================== FUNÇÕES AUXILIARES DO TERMINAL ====================
+function adicionarSaidaTerminal(texto, tipo = 'normal') {
+    const container = document.getElementById('terminal-output');
+    if (!container) return;
+    
+    const div = document.createElement('div');
+    div.className = 'terminal-output';
+    
+    let conteudo = `<span class="terminal-prompt">[root@rhcsa-lab ~]# </span>`;
+    
+    if (tipo === 'error') {
+        conteudo += `<span class="terminal-error">${texto}</span>`;
+    } else if (tipo === 'success') {
+        conteudo += `<span class="terminal-success">${texto}</span>`;
+    } else if (tipo === 'info') {
+        conteudo += `<span class="terminal-info">${texto}</span>`;
+    } else if (tipo === 'hint') {
+        conteudo += `<span class="terminal-hint">${texto}</span>`;
+    } else if (tipo === 'command') {
+        conteudo += `<span class="terminal-command">${texto}</span>`;
+    } else {
+        conteudo += `<span>${texto}</span>`;
+    }
+    
+    div.innerHTML = conteudo;
+    container.appendChild(div);
+    container.scrollTop = container.scrollHeight;
+}
+
+function inserirComando(comando) {
+    const input = document.getElementById('terminal-input');
+    if (input) {
+        input.value = comando;
+        input.focus();
+    }
+}
+
+function limparTerminal() {
+    const container = document.getElementById('terminal-output');
+    if (container) {
+        container.innerHTML = `
+            <div class="terminal-output">
+                <span class="terminal-prompt">[root@rhcsa-lab ~]# </span>
+                <span class="terminal-success">Terminal limpo. Digite 'help' para ajuda.</span>
+            </div>
+        `;
+    }
+}
+
+function mostrarAjuda() {
+    adicionarSaidaTerminal(comandosTerminal.help, 'info');
+}
+
+// ==================== CONFIGURAÇÃO DE AUTO-COMPLETE ====================
+function configurarAutoComplete() {
+    const input = document.getElementById('terminal-input');
+    if (!input) return;
+    
+    input.addEventListener('keydown', function(e) {
+        // TAB para auto-completar
+        if (e.key === 'Tab') {
+            e.preventDefault();
+            const texto = this.value.trim();
+            const comandos = Object.keys(comandosTerminal);
+            
+            // Encontrar comando que começa com o texto digitado
+            const match = comandos.find(cmd => cmd.startsWith(texto));
+            if (match) {
+                this.value = match;
+            }
+        }
+        
+        // Setas para navegar no histórico
+        if (e.key === 'ArrowUp') {
+            e.preventDefault();
+            if (indiceHistorico > 0) {
+                indiceHistorico--;
+                this.value = historicoComandos[indiceHistorico];
+            }
+        }
+        
+        if (e.key === 'ArrowDown') {
+            e.preventDefault();
+            if (indiceHistorico < historicoComandos.length - 1) {
+                indiceHistorico++;
+                this.value = historicoComandos[indiceHistorico];
+            } else {
+                indiceHistorico = historicoComandos.length;
+                this.value = '';
+            }
+        }
+    });
+}
+
+// ==================== SISTEMA DE VERIFICAÇÃO ====================
 function verificarQuestao() {
     const select = document.getElementById('questao-verificar');
     const id = parseInt(select.value);
@@ -896,67 +1090,76 @@ function verificarQuestao() {
     }
     
     // Atualizar interface
-    atualizarProgresso();
     carregarQuestoes();
+    atualizarProgressoVisual();
 }
 
-// ==================== FUNÇÃO PARA AUTO-COMPLETAR ====================
-function configurarAutoComplete() {
-    const input = document.getElementById('terminal-input');
+// ==================== ATUALIZAR DROPDOWN DE VERIFICAÇÃO ====================
+function atualizarDropdownVerificacao() {
+    const select = document.getElementById('questao-verificar');
+    if (!select) return;
     
-    input.addEventListener('keydown', function(e) {
-        // TAB para auto-completar
-        if (e.key === 'Tab') {
-            e.preventDefault();
-            const texto = this.value.trim();
-            const comandos = Object.keys(comandosTerminal);
-            
-            // Encontrar comando que começa com o texto digitado
-            const match = comandos.find(cmd => cmd.startsWith(texto));
-            if (match) {
-                this.value = match;
-            }
-        }
-        
-        // Setas para navegar no histórico
-        if (e.key === 'ArrowUp') {
-            e.preventDefault();
-            if (indiceHistorico > 0) {
-                indiceHistorico--;
-                this.value = historicoComandos[indiceHistorico];
-            }
-        }
-        
-        if (e.key === 'ArrowDown') {
-            e.preventDefault();
-            if (indiceHistorico < historicoComandos.length - 1) {
-                indiceHistorico++;
-                this.value = historicoComandos[indiceHistorico];
-            } else {
-                indiceHistorico = historicoComandos.length;
-                this.value = '';
-            }
-        }
+    // Manter opção atual
+    const valorAtual = select.value;
+    select.innerHTML = '<option value="">Selecione uma questão...</option>';
+    
+    questoes.forEach(q => {
+        const option = document.createElement('option');
+        option.value = q.id;
+        option.textContent = `Questão ${q.id}: ${q.titulo}`;
+        select.appendChild(option);
     });
-}
-
-// ==================== BOTÕES DE COMANDOS RÁPIDOS MELHORADOS ====================
-function atualizarBotoesComandos() {
-    // Esta função pode ser usada para atualizar dinamicamente os botões
-    // com base na questão selecionada
-}
-
-// ==================== INICIALIZAÇÃO MELHORADA ====================
-document.addEventListener('DOMContentLoaded', function() {
-    // ... código anterior ...
     
-    // Configurar auto-complete
+    // Restaurar valor anterior
+    if (valorAtual) {
+        select.value = valorAtual;
+    }
+}
+
+// ==================== INICIALIZAÇÃO ====================
+document.addEventListener('DOMContentLoaded', function() {
+    console.log('Página carregada - iniciando RHCSA Study Lab');
+    
+    // Carregar questões
+    carregarQuestoes();
+    
+    // Configurar filtros
+    configurarFiltros();
+    
+    // Atualizar progresso visual
+    atualizarProgressoVisual();
+    
+    // Atualizar dropdown de verificação
+    atualizarDropdownVerificacao();
+    
+    // Configurar auto-complete do terminal
     configurarAutoComplete();
+    
+    // Configurar evento do botão executar
+    const btnExecutar = document.querySelector('button[onclick="executarComando()"]');
+    if (btnExecutar) {
+        btnExecutar.addEventListener('click', executarComando);
+    }
+    
+    // Configurar evento Enter no input do terminal
+    const terminalInput = document.getElementById('terminal-input');
+    if (terminalInput) {
+        terminalInput.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                executarComando();
+            }
+        });
+    }
     
     // Mensagem de boas-vindas no terminal
     setTimeout(() => {
         adicionarSaidaTerminal('💡 Dica: Digite "help" para ver todos os comandos disponíveis.', 'info');
         adicionarSaidaTerminal('💡 Use TAB para auto-completar comandos.', 'info');
         adicionarSaidaTerminal('💡 Use setas ↑↓ para navegar no histórico.', 'info');
+        adicionarSaidaTerminal('💡 O sistema detecta erros comuns e sugere correções!', 'info');
     }, 1000);
+    
+    // Log de inicialização
+    console.log('RHCSA Study Lab inicializado com sucesso!');
+    console.log('Total de questões disponíveis:', questoes.length);
 });
