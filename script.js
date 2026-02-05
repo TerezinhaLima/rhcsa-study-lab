@@ -224,3 +224,14 @@ const questoes = [
         solucao: "Verifique com: ls -ld /collab\nDeve mostrar: drwxrwsr-x\nTeste criando arquivo e veja o grupo"
     }
 ];
+// Atualizar badge com total de questões
+document.addEventListener('DOMContentLoaded', function() {
+    carregarQuestoes();
+    atualizarProgressoVisual();
+    
+    // Atualizar badge
+    const badge = document.getElementById('total-questoes-badge');
+    if (badge) {
+        badge.textContent = `${questoes.length} Questões`;
+    }
+});
