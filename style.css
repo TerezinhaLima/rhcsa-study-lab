@@ -1,0 +1,148 @@
+/* Estilos principais */
+:root {
+    --primary-color: #e00;
+    --secondary-color: #333;
+    --success-color: #28a745;
+    --warning-color: #ffc107;
+    --danger-color: #dc3545;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    padding-top: 76px;
+}
+
+.hero-section {
+    background: linear-gradient(135deg, #2c3e50 0%, #4a6491 100%);
+    color: white;
+    padding: 80px 0;
+}
+
+.badges .badge {
+    font-size: 0.9rem;
+    margin: 0 5px;
+    padding: 8px 15px;
+}
+
+.feature-card {
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    transition: transform 0.3s;
+}
+
+.feature-card:hover {
+    transform: translateY(-5px);
+}
+
+.questao-card {
+    border: 1px solid #dee2e6;
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 20px;
+    transition: all 0.3s;
+    background: white;
+}
+
+.questao-card:hover {
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+}
+
+.questao-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: start;
+    margin-bottom: 15px;
+}
+
+.questao-id {
+    font-size: 0.9rem;
+    color: #666;
+}
+
+.dificuldade {
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: bold;
+}
+
+.dificuldade-facil {
+    background-color: #d4edda;
+    color: #155724;
+}
+
+.dificuldade-medio {
+    background-color: #fff3cd;
+    color: #856404;
+}
+
+.dificuldade-dificil {
+    background-color: #f8d7da;
+    color: #721c24;
+}
+
+.btn-terminal {
+    background-color: #333;
+    color: white;
+    border: none;
+}
+
+.btn-terminal:hover {
+    background-color: #555;
+    color: white;
+}
+
+.progress {
+    height: 8px;
+    margin-top: 10px;
+}
+
+/* Estilos para o terminal */
+.terminal-container {
+    background-color: #1e1e1e;
+    color: #f8f8f2;
+    border-radius: 8px;
+    padding: 20px;
+    font-family: 'Courier New', monospace;
+    height: 500px;
+    overflow-y: auto;
+}
+
+.terminal-output {
+    margin-bottom: 10px;
+}
+
+.terminal-input {
+    display: flex;
+    align-items: center;
+}
+
+.terminal-prompt {
+    color: #50fa7b;
+    margin-right: 10px;
+}
+
+.terminal-input input {
+    background: transparent;
+    border: none;
+    color: white;
+    flex-grow: 1;
+    font-family: 'Courier New', monospace;
+    outline: none;
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+    body {
+        padding-top: 66px;
+    }
+    
+    .hero-section {
+        padding: 60px 0;
+    }
+    
+    .display-4 {
+        font-size: 2.5rem;
+    }
+}
