@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Terminal - RHCSA Study Lab</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .terminal {
+            font-family: 'Courier New', monospace;
+            background: #1e1e1e;
+            color: #f8f8f2;
+            height: calc(100vh - 200px);
+            overflow-y: auto;
+            padding: 20px;
+            border-radius: 8px;
+        }
+        .terminal-line {
+            margin-bottom: 10px;
+            white-space: pre-wrap;
+        }
+        .prompt {
+            color: #50fa7b;
+        }
+        .command {
+            color: #8be9fd;
+        }
+        .output {
+            color: #f8f8f2;
+        }
+        .error {
+            color: #ff5555;
+        }
+        .success {
+            color: #50fa7b;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-dark bg-dark">
+        <div class="container">
+            <a class="navbar-brand" href="index.html">
+                <i class="fab fa-redhat"></i> RHCSA Terminal
+            </a>
+            <a href="index.html" class="btn btn-outline-light">
+                <i class="fas fa-arrow-left"></i> Voltar
+            </a>
+        </div>
+    </nav>
+
+    <div class="container mt-4">
+        <div class="row">
+            <div class="col-md-3">
+                <div class="card">
+                    <div class="card-header">
+                        <i class="fas fa-terminal"></i> Comandos Disponíveis
+                    </div>
+                    <div class="card-body">
+                        <div class="list-group">
+                            <button class="list-group-item list-group-item-action" onclick="executarComando('whoami')">
+                                whoami
+                            </button>
+                            <button class="list-group-item list-group-item-action" onclick="executarComando('hostnamectl')">
+                                hostnamectl
+                            </button>
+                            <button class="list-group-item list-group-item-action" onclick="executarComando('ip addr show')">
+                                ip addr show
+                            </button>
+                            <button class="list-group-item list-group-item-action" onclick="executarComando('lsblk')">
+                                lsblk
+                            </button>
+                            <button class="list-group-item list-group-item-action" onclick="executarComando('systemctl status')">
+                                systemctl status
+                            </button>
+                            <button class="list-group-item list-group-item-action" onclick="executarComando('getenforce')">
+                                getenforce
+                            </button>
+                            <button class="list-group-item list-group-item-action" onclick="executarComando('df -h')">
+                                df -h
+                            </button>
+                            <button class="list-group-item list-group-item-action" onclick="executarComando('free -h')">
+                                free -h
+                            </button>
+                            <button class="list-group-item list-group-item-action" onclick="executarComando('ps aux | head -10')">
+                                ps aux
+                            </button>
+                        </div>
+                        
+                        <hr>
+                        <h6>Comandos Personalizados</h6>
+                        <div class="mt-2">
+                            <input type="text" id="customCommand" class="form-control" placeholder="Digite um comando...">
+                            <button class="btn btn-primary mt-2 w-100" onclick="executarCustom()">
+                                Executar
+                            </button>
+                        </div>
+                        
+                        <hr>
+                        <button class="btn btn-danger w-100" onclick="limparTerminal()">
+                            <i class="fas fa-trash"></i> Limpar Terminal
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-9">
+                <div class="card">
+                    <div class="card-header">
+                        <i class="fas fa-terminal"></i> Terminal Interativo
+                        <span class="badge bg-success float-end">Linux Simulator</span>
+                    </div>
+                    <div class="card-body p-0">
+                        <div id="terminal" class="terminal">
+                            <div class="terminal-line">
+                                <span class="prompt">[user@rhcsa-lab ~]$ </span>
+                                <span class="output">Bem-vindo ao Terminal RHCSA Study Lab!</span>
+                            </div>
+                            <div class="terminal-line">
+                                <span class="prompt">[user@rhcsa-lab ~]$ </span>
+                                <span class="output">Digite 'help' para ver comandos disponíveis</span>
+                            </div>
+                            <div class="terminal-line">
+                                <span class="prompt">[user@rhcsa-lab ~]$ </span>
+                                <span class="output">Use os botões à esquerda ou digite comandos manualmente</span>
+                            </div>
+                        </div>
+                        
+                        <div class="input-group p-3 bg-dark">
+                            <span class="input-group-text prompt">[user@rhcsa-lab ~]$</span>
+                            <input type="text" id="commandInput" class="form-control bg-dark text-light" 
+                                   placeholder="Digite um comando Linux..." 
+                                   onkeypress="if(event.key === 'Enter') executarInput()">
+                            <button class="btn btn-success" onclick="executarInput()">
+                                <i class="fas fa-play"></i> Executar
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row mt-4">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <i class="fas fa-lightbulb"></i> Dicas para o Terminal
+                    </div>
+                    <div class="card-body">
+                        <ul>
+                            <li>Este é um <strong>simulador</strong> - os comandos não são executados em um sistema real</li>
+                            <li>Use para praticar a sintaxe e entender a saída esperada</li>
+                            <li>Para prática real, use uma VM com Red Hat/CentOS</li>
+                            <li>Clique nos comandos à esquerda para executá-los rapidamente</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="terminal.js"></script>
+</body>
+</html>
