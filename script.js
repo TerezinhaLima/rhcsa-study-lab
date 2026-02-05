@@ -508,3 +508,455 @@ document.addEventListener('DOMContentLoaded', function() {
     console.log('RHCSA Study Lab inicializado com sucesso!');
     console.log('Total de questões disponíveis:', questoes.length);
 });
+// ==================== SISTEMA DE COMANDOS AVANÇADO ====================
+const comandosTerminal = {
+    // Comandos básicos
+    'whoami': 'root',
+    
+    'hostnamectl': `Static hostname: rhcsa-lab
+       Icon name: computer-vm
+         Chassis: vm
+      Machine ID: 1234567890abcdef
+         Boot ID: abcdef1234567890
+  Virtualization: kvm
+Operating System: Red Hat Enterprise Linux 8.5 (Ootpa)
+          Kernel: Linux 4.18.0-348.el8.x86_64
+    Architecture: x86-64`,
+    
+    'hostnamectl set-hostname Machine1.example.com': 'Hostname set to: Machine1.example.com',
+    
+    'ip addr show': `1: lo: <LOOPBACK,UP,LOWER_UP> mtu 65536 qdisc noqueue state UNKNOWN group default qlen 1000
+    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
+    inet 127.0.0.1/8 scope host lo
+       valid_lft forever preferred_lft forever
+2: eth0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc fq_codel state UP group default qlen 1000
+    link/ether 52:54:00:12:34:56 brd ff:ff:ff:ff:ff:ff
+    inet 192.168.1.100/24 brd 192.168.1.255 scope global eth0
+       valid_lft forever preferred_lft forever`,
+    
+    'nmcli connection modify eth0 ipv4.addresses 192.168.1.100/24 ipv4.gateway 192.168.1.1 ipv4.dns 8.8.8.8 ipv4.method manual': 
+    'Connection modified successfully.',
+    
+    'nmcli connection up eth0': 'Connection successfully activated.',
+    
+    // Storage
+    'lsblk': `NAME   MAJ:MIN RM  SIZE RO TYPE MOUNTPOINT
+sda      8:0    0   20G  0 disk
+├─sda1   8:1    0    1G  0 part /boot
+└─sda2   8:2    0   19G  0 part
+  ├─rhel-root 253:0    0   17G  0 lvm  /
+  └─rhel-swap 253:1    0    2G  0 lvm  [SWAP]
+sdb      8:16   0   10G  0 disk
+└─sdb1   8:17   0   10G  0 part`,
+    
+    'pvcreate /dev/sdb1': 'Physical volume "/dev/sdb1" successfully created.',
+    
+    'vgcreate datavg /dev/sdb1': 'Volume group "datavg" successfully created',
+    
+    'lvcreate -L 5G -n datalv datavg': 'Logical volume "datalv" created.',
+    
+    // Serviços
+    'systemctl status httpd': `● httpd.service - The Apache HTTP Server
+   Loaded: loaded (/usr/lib/systemd/system/httpd.service; enabled; vendor preset: disabled)
+   Active: active (running) since Mon 2024-01-01 10:00:00 UTC; 1h ago
+ Main PID: 1234 (httpd)
+    Tasks: 213 (limit: 11336)
+   Memory: 25.3M
+   CGroup: /system.slice/httpd.service
+           ├─1234 /usr/sbin/httpd -DFOREGROUND
+           ├─1235 /usr/sbin/httpd -DFOREGROUND
+           └─1236 /usr/sbin/httpd -DFOREGROUND`,
+    
+    'systemctl start httpd': 'Started The Apache HTTP Server.',
+    
+    'systemctl enable httpd': 'Created symlink /etc/systemd/system/multi-user.target.wants/httpd.service → /usr/lib/systemd/system/httpd.service.',
+    
+    // Segurança
+    'getenforce': 'Enforcing',
+    
+    'setenforce 0': 'SELinux disabled temporarily.',
+    
+    // Usuários e grupos
+    'useradd redhat': 'User "redhat" created successfully.',
+    
+    'groupadd time-ti': 'Group "time-ti" created successfully.',
+    
+    'useradd -g time-ti alex': 'User "alex" added to group "time-ti".',
+    
+    // Permissões
+    'mkdir /shared': '',
+    
+    'chmod 770 /shared': '',
+    
+    'setfacl -m u:alex:rwx /shared': 'ACL modified for /shared.',
+    
+    'getfacl /shared': `# file: shared
+# owner: root
+# group: root
+user::rwx
+user:alex:rwx
+group::rwx
+mask::rwx
+other::---`,
+    
+    // Network
+    'firewall-cmd --add-port=82/tcp --permanent': 'success',
+    
+    'firewall-cmd --reload': 'success',
+    
+    // Outros
+    'df -h': `Filesystem      Size  Used Avail Use% Mounted on
+/dev/sda2        19G  5.2G   14G  28% /
+/dev/sda1       976M  256M  653M  28% /boot
+tmpfs           1.9G     0  1.9G   0% /dev/shm
+/dev/mapper/datavg-datalv  5.0G   33M  5.0G   1% /data`,
+    
+    'free -h': `              total        used        free      shared  buff/cache   available
+Mem:           1.9G        800M        300M         50M        800M        900M
+Swap:          2.0G          0B        2.0G`,
+    
+    'ps aux | head -10': `USER       PID %CPU %MEM    VSZ   RSS TTY      STAT START   TIME COMMAND
+root         1  0.0  0.1 169316 13104 ?        Ss   10:00   0:01 /usr/lib/systemd/systemd
+root         2  0.0  0.0      0     0 ?        S    10:00   0:00 [kthreadd]
+root         3  0.0  0.0      0     0 ?        I<   10:00   0:00 [rcu_gp]`,
+    
+    'ls': `Desktop  Documents  Downloads  Music  Pictures  Public  Templates  Videos`,
+    
+    'pwd': '/root',
+    
+    'date': 'Mon Mar  1 10:30:00 UTC 2024',
+    
+    'uname -a': 'Linux rhcsa-lab 4.18.0-348.el8.x86_64 #1 SMP Wed Oct 13 14:25:44 UTC 2021 x86_64 x86_64 x86_64 GNU/Linux',
+    
+    'help': `=== COMANDOS DISPONÍVEIS ===
+
+🌐 REDE:
+  ip addr show                    - Mostra interfaces de rede
+  nmcli connection modify ...     - Configura IP estático
+  hostnamectl set-hostname ...    - Altera hostname
+  firewall-cmd ...                - Gerencia firewall
+
+💾 STORAGE:
+  lsblk                           - Lista dispositivos de bloco
+  pvcreate /dev/sdb1              - Cria volume físico LVM
+  vgcreate datavg /dev/sdb1       - Cria grupo de volumes
+  lvcreate -L 5G -n datalv datavg - Cria volume lógico
+  df -h                           - Espaço em disco
+
+👥 USUÁRIOS E PERMISSÕES:
+  useradd [nome]                  - Cria usuário
+  groupadd [nome]                 - Cria grupo
+  mkdir /shared                   - Cria diretório
+  chmod 770 /shared               - Altera permissões
+  setfacl -m u:[user]:rwx /shared - Configura ACL
+  getfacl /shared                 - Mostra ACL
+
+⚙️ SERVIÇOS:
+  systemctl status httpd          - Status do Apache
+  systemctl start httpd           - Inicia serviço
+  systemctl enable httpd          - Habilita no boot
+
+🔒 SEGURANÇA:
+  getenforce                      - Status SELinux
+  setenforce 0                    - Desabilita SELinux
+
+📊 SISTEMA:
+  whoami                          - Usuário atual
+  hostnamectl                     - Informações do sistema
+  free -h                         - Memória e swap
+  ps aux                          - Processos
+
+❓ AJUDA:
+  clear                           - Limpa terminal
+  help                            - Mostra esta ajuda
+
+💡 DICA: Use TAB para auto-completar comandos!`
+};
+
+// Sistema de auto-completar com TAB
+let historicoComandos = [];
+let indiceHistorico = -1;
+
+// Função melhorada para executar comandos
+function executarComando() {
+    const input = document.getElementById('terminal-input');
+    let comando = input.value.trim();
+    
+    if (!comando) return;
+    
+    // Adicionar ao histórico
+    historicoComandos.push(comando);
+    indiceHistorico = historicoComandos.length;
+    
+    // Mostrar comando executado
+    adicionarSaidaTerminal(`<span class="terminal-command">${comando}</span>`, 'command');
+    
+    // Processar comandos especiais
+    if (comando === 'clear') {
+        limparTerminal();
+        input.value = '';
+        return;
+    }
+    
+    if (comando === 'exit') {
+        adicionarSaidaTerminal('Use as abas para navegar. Digite "help" para ver comandos.', 'info');
+        input.value = '';
+        return;
+    }
+    
+    // Verificar se comando existe (com aproximação para erros de digitação)
+    let comandoEncontrado = null;
+    
+    // Primeiro tentar match exato
+    if (comandosTerminal[comando]) {
+        comandoEncontrado = comando;
+    } else {
+        // Tentar encontrar comando similar (para lidar com erros de digitação)
+        const comandosDisponiveis = Object.keys(comandosTerminal);
+        for (let cmd of comandosDisponiveis) {
+            if (cmd.startsWith(comando.split(' ')[0])) {
+                // Sugerir comando correto
+                if (comando.includes('hostanmectl')) {
+                    comandoEncontrado = cmd.replace('hostanmectl', 'hostnamectl');
+                    adicionarSaidaTerminal(`💡 Dica: O comando correto é "hostnamectl" (sem o 'n' extra)`, 'info');
+                } else if (cmd.includes(comando) || levenshteinDistance(cmd, comando) < 3) {
+                    comandoEncontrado = cmd;
+                    adicionarSaidaTerminal(`💡 Você quis dizer: "${cmd}"?`, 'info');
+                }
+            }
+        }
+    }
+    
+    if (comandoEncontrado && comandosTerminal[comandoEncontrado]) {
+        // Executar comando
+        const resultado = comandosTerminal[comandoEncontrado];
+        if (resultado) {
+            adicionarSaidaTerminal(resultado, 'normal');
+        }
+        
+        // Verificar se este comando corresponde a alguma questão
+        verificarComandoQuestao(comandoEncontrado);
+    } else {
+        adicionarSaidaTerminal(`bash: ${comando}: comando não encontrado\nDigite 'help' para ajuda.`, 'error');
+    }
+    
+    input.value = '';
+    input.focus();
+}
+
+// Função de distância Levenshtein para correção de erros de digitação
+function levenshteinDistance(a, b) {
+    const matrix = [];
+    for (let i = 0; i <= b.length; i++) {
+        matrix[i] = [i];
+    }
+    for (let j = 0; j <= a.length; j++) {
+        matrix[0][j] = j;
+    }
+    for (let i = 1; i <= b.length; i++) {
+        for (let j = 1; j <= a.length; j++) {
+            if (b.charAt(i - 1) === a.charAt(j - 1)) {
+                matrix[i][j] = matrix[i - 1][j - 1];
+            } else {
+                matrix[i][j] = Math.min(
+                    matrix[i - 1][j - 1] + 1,
+                    matrix[i][j - 1] + 1,
+                    matrix[i - 1][j] + 1
+                );
+            }
+        }
+    }
+    return matrix[b.length][a.length];
+}
+
+// ==================== SISTEMA DE VERIFICAÇÃO INTELIGENTE ====================
+const solucoesQuestoes = {
+    1: ['nmcli connection modify eth0', '192.168.1.100', 'ip addr show'],
+    2: ['vim /etc/yum.repos.d/local.repo', 'baseurl=file:///mnt', 'yum repolist'],
+    3: ['mkdir /shared', 'chmod 770', 'setfacl', 'getfacl'],
+    4: ['useradd redhat', 'groupadd', 'uid=2000'],
+    5: ['ssh-keygen', 'ssh-copy-id'],
+    6: ['Listen 82', 'firewall-cmd', 'systemctl'],
+    7: ['pvcreate', 'vgcreate', 'lvcreate', 'mkfs.xfs'],
+    8: ['crontab', '30 2'],
+    9: ['tar -czf', '/etc'],
+    10: ['groupadd time-ti', 'useradd -g time-ti'],
+    11: ['useradd -u 3000'],
+    12: ['find / -user tom'],
+    13: ['find / -user jerry', '-mtime -7'],
+    14: ['mkdir /public', 'chmod 1777'],
+    15: ['vim /usr/local/bin/find-sgid.sh', 'find / -perm -2000'],
+    16: ['rd.break', 'passwd root'],
+    17: ['Dockerfile', 'FROM nginx', 'podman build'],
+    18: ['podman', 'rootless', '/etc/subuid'],
+    19: ['mkswap', 'swapon', '/etc/fstab'],
+    20: ['lvcreate -l 10'],
+    21: ['tuned-adm profile', 'throughput-performance'],
+    22: ['mkdir /collab', 'chmod 2775', 'SGID']
+};
+
+let comandosExecutados = [];
+
+function verificarComandoQuestao(comando) {
+    comandosExecutados.push(comando);
+    
+    // Verificar cada questão
+    for (let id in solucoesQuestoes) {
+        const palavrasChave = solucoesQuestoes[id];
+        const correspondencias = palavrasChave.filter(palavra => 
+            comando.toLowerCase().includes(palavra.toLowerCase())
+        ).length;
+        
+        if (correspondencias >= 2) {
+            // Encontrou correspondência com uma questão
+            setTimeout(() => {
+                const questao = questoes.find(q => q.id == id);
+                if (questao && !progresso[id]) {
+                    adicionarSaidaTerminal(`🔍 Detectei que você está trabalhando na Questão ${id}: ${questao.titulo}`, 'info');
+                    adicionarSaidaTerminal(`💡 Dica: ${questao.solucao.substring(0, 100)}...`, 'info');
+                }
+            }, 500);
+            break;
+        }
+    }
+    
+    // Limitar histórico de comandos
+    if (comandosExecutados.length > 50) {
+        comandosExecutados = comandosExecutados.slice(-50);
+    }
+}
+
+// Função de verificação melhorada
+function verificarQuestao() {
+    const select = document.getElementById('questao-verificar');
+    const id = parseInt(select.value);
+    
+    if (!id) {
+        alert('Selecione uma questão primeiro!');
+        return;
+    }
+    
+    const questao = questoes.find(q => q.id == id);
+    if (!questao) return;
+    
+    // Registrar tentativa
+    tentativas[questao.id] = (tentativas[questao.id] || 0) + 1;
+    localStorage.setItem('rhcsa-tentativas', JSON.stringify(tentativas));
+    
+    // Verificação inteligente baseada nos comandos executados
+    const palavrasChave = solucoesQuestoes[id];
+    let pontuacao = 0;
+    let feedback = [];
+    
+    comandosExecutados.forEach(comando => {
+        palavrasChave.forEach(palavra => {
+            if (comando.toLowerCase().includes(palavra.toLowerCase())) {
+                pontuacao += 1;
+                feedback.push(`✓ Executou: ${comando}`);
+            }
+        });
+    });
+    
+    // Determinar se passou (mínimo 60% das palavras-chave)
+    const porcentagem = (pontuacao / palavrasChave.length) * 100;
+    const aprovado = porcentagem >= 60;
+    
+    if (aprovado) {
+        progresso[questao.id] = true;
+        localStorage.setItem('rhcsa-progresso', JSON.stringify(progresso));
+        
+        adicionarSaidaTerminal(`✅ Questão ${id} VERIFICADA com SUCESSO! (${Math.round(porcentagem)}% correto)`, 'success');
+        
+        // Feedback detalhado
+        feedback.forEach(msg => {
+            adicionarSaidaTerminal(msg, 'info');
+        });
+        
+        if (porcentagem < 100) {
+            adicionarSaidaTerminal(`💡 Você acertou ${pontuacao} de ${palavrasChave.length} passos. Continue praticando!`, 'info');
+        } else {
+            adicionarSaidaTerminal(`🎉 PERFEITO! Você completou todos os passos corretamente!`, 'success');
+        }
+    } else {
+        adicionarSaidaTerminal(`❌ Questão ${id} precisa de ajustes. (${Math.round(porcentagem)}% correto)`, 'error');
+        
+        // Mostrar o que falta
+        const palavrasFaltantes = palavrasChave.filter(palavra => 
+            !comandosExecutados.some(cmd => cmd.toLowerCase().includes(palavra.toLowerCase()))
+        );
+        
+        if (palavrasFaltantes.length > 0) {
+            adicionarSaidaTerminal(`📝 Faltou executar estes passos:`, 'info');
+            palavrasFaltantes.forEach(palavra => {
+                adicionarSaidaTerminal(`   • ${palavra}`, 'info');
+            });
+        }
+        
+        adicionarSaidaTerminal(`💡 Dica: ${questao.solucao.substring(0, 150)}`, 'info');
+    }
+    
+    // Atualizar interface
+    atualizarProgresso();
+    carregarQuestoes();
+}
+
+// ==================== FUNÇÃO PARA AUTO-COMPLETAR ====================
+function configurarAutoComplete() {
+    const input = document.getElementById('terminal-input');
+    
+    input.addEventListener('keydown', function(e) {
+        // TAB para auto-completar
+        if (e.key === 'Tab') {
+            e.preventDefault();
+            const texto = this.value.trim();
+            const comandos = Object.keys(comandosTerminal);
+            
+            // Encontrar comando que começa com o texto digitado
+            const match = comandos.find(cmd => cmd.startsWith(texto));
+            if (match) {
+                this.value = match;
+            }
+        }
+        
+        // Setas para navegar no histórico
+        if (e.key === 'ArrowUp') {
+            e.preventDefault();
+            if (indiceHistorico > 0) {
+                indiceHistorico--;
+                this.value = historicoComandos[indiceHistorico];
+            }
+        }
+        
+        if (e.key === 'ArrowDown') {
+            e.preventDefault();
+            if (indiceHistorico < historicoComandos.length - 1) {
+                indiceHistorico++;
+                this.value = historicoComandos[indiceHistorico];
+            } else {
+                indiceHistorico = historicoComandos.length;
+                this.value = '';
+            }
+        }
+    });
+}
+
+// ==================== BOTÕES DE COMANDOS RÁPIDOS MELHORADOS ====================
+function atualizarBotoesComandos() {
+    // Esta função pode ser usada para atualizar dinamicamente os botões
+    // com base na questão selecionada
+}
+
+// ==================== INICIALIZAÇÃO MELHORADA ====================
+document.addEventListener('DOMContentLoaded', function() {
+    // ... código anterior ...
+    
+    // Configurar auto-complete
+    configurarAutoComplete();
+    
+    // Mensagem de boas-vindas no terminal
+    setTimeout(() => {
+        adicionarSaidaTerminal('💡 Dica: Digite "help" para ver todos os comandos disponíveis.', 'info');
+        adicionarSaidaTerminal('💡 Use TAB para auto-completar comandos.', 'info');
+        adicionarSaidaTerminal('💡 Use setas ↑↓ para navegar no histórico.', 'info');
+    }, 1000);
+});
