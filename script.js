@@ -1,244 +1,226 @@
-// Dados das questões
+// Dados das 22 questões COMPLETAS
 const questoes = [
+    // NODE 1 - Questões 1 a 15
     {
         id: 1,
         node: 1,
         topico: "Rede",
         dificuldade: "Fácil",
         titulo: "Configurar IP Estático",
-        descricao: "Configure um endereço IP estático para sua máquina.",
-        comando: "nmcli connection modify eth0 ipv4.addresses 192.168.1.100/24",
-        solucao: "Verifique com: ip addr show eth0"
+        descricao: "Configure um endereço IP estático (192.168.1.100/24) para a interface eth0. Configure também o gateway (192.168.1.1) e DNS (8.8.8.8).",
+        comando: "nmcli connection modify eth0 ipv4.addresses 192.168.1.100/24 ipv4.gateway 192.168.1.1 ipv4.dns 8.8.8.8 ipv4.method manual",
+        solucao: "Verifique com: ip addr show eth0\nVerifique gateway: ip route show\nVerifique DNS: cat /etc/resolv.conf"
     },
     {
         id: 2,
         node: 1,
         topico: "Pacotes",
         dificuldade: "Fácil",
-        titulo: "Configurar YUM Repository",
-        descricao: "Configure um repositório YUM local.",
+        titulo: "Configurar YUM Repository Local",
+        descricao: "Configure um repositório YUM local apontando para /mnt. O repositório deve ser habilitado e sem verificação GPG.",
         comando: "sudo vim /etc/yum.repos.d/local.repo",
-        solucao: "Conteúdo: [local]\nname=Local Repo\nbaseurl=file:///mnt\nenabled=1\ngpgcheck=0"
+        solucao: "Conteúdo do arquivo:\n[local]\nname=Local Repository\nbaseurl=file:///mnt\nenabled=1\ngpgcheck=0\n\nVerifique com: yum repolist"
     },
-    // ... adicione as outras 20 questões seguindo o mesmo padrão
+    {
+        id: 3,
+        node: 1,
+        topico: "Permissões",
+        dificuldade: "Médio",
+        titulo: "Diretório com ACL",
+        descricao: "Crie o diretório /shared com permissões 770. Adicione permissão de leitura e escrita para o usuário 'alex' usando ACL.",
+        comando: "mkdir /shared\nchmod 770 /shared\nsetfacl -m u:alex:rwx /shared",
+        solucao: "Verifique com: getfacl /shared\nDeve mostrar: user:alex:rwx"
+    },
+    {
+        id: 4,
+        node: 1,
+        topico: "Usuários",
+        dificuldade: "Fácil",
+        titulo: "Criar Usuário Redhat",
+        descricao: "Crie um usuário chamado 'redhat' com UID 2000 e GID 2000. A senha deve ser 'redhat123'.",
+        comando: "groupadd -g 2000 redhat\nuseradd -u 2000 -g 2000 redhat\necho 'redhat123' | passwd --stdin redhat",
+        solucao: "Verifique com: id redhat\nDeve mostrar: uid=2000(redhat) gid=2000(redhat)"
+    },
+    {
+        id: 5,
+        node: 1,
+        topico: "Rede",
+        dificuldade: "Médio",
+        titulo: "SSH sem Senha",
+        descricao: "Configure SSH para permitir login sem senha do usuário atual para o usuário 'admin' no host remoto (192.168.1.50).",
+        comando: "ssh-keygen -t rsa\nssh-copy-id admin@192.168.1.50",
+        solucao: "Teste com: ssh admin@192.168.1.50 'whoami'\nDeve conectar sem pedir senha"
+    },
+    {
+        id: 6,
+        node: 1,
+        topico: "Serviços",
+        dificuldade: "Médio",
+        titulo: "Servidor Web na Porta 82",
+        descricao: "Configure o Apache para escutar na porta 82. Adicione regra no firewall e faça o serviço iniciar no boot.",
+        comando: "vim /etc/httpd/conf/httpd.conf\n# Mude Listen 80 para Listen 82\nsystemctl enable --now httpd\nfirewall-cmd --add-port=82/tcp --permanent\nfirewall-cmd --reload",
+        solucao: "Verifique com: ss -tlnp | grep :82\nTeste: curl http://localhost:82"
+    },
+    {
+        id: 7,
+        node: 1,
+        topico: "Storage",
+        dificuldade: "Difícil",
+        titulo: "Volume Lógico LVM",
+        descricao: "Crie um volume físico em /dev/sdb1, grupo de volume 'datavg', e volume lógico 'datalv' de 5GB. Formate com XFS e monte em /data.",
+        comando: "pvcreate /dev/sdb1\nvgcreate datavg /dev/sdb1\nlvcreate -L 5G -n datalv datavg\nmkfs.xfs /dev/datavg/datalv\nmkdir /data\necho '/dev/datavg/datalv /data xfs defaults 0 0' >> /etc/fstab\nmount -a",
+        solucao: "Verifique com: lvs\nVerifique montagem: df -h /data"
+    },
+    {
+        id: 8,
+        node: 1,
+        topico: "Agendamento",
+        dificuldade: "Fácil",
+        titulo: "Cronjob para devuser",
+        descricao: "Configure um cronjob para o usuário 'devuser' que execute '/opt/backup.sh' todos os dias às 2:30 AM.",
+        comando: "crontab -u devuser -e",
+        solucao: "Adicione esta linha:\n30 2 * * * /opt/backup.sh\n\nVerifique com: crontab -u devuser -l"
+    },
+    {
+        id: 9,
+        node: 1,
+        topico: "Arquivos",
+        dificuldade: "Fácil",
+        titulo: "Compactar Diretório /etc",
+        descricao: "Crie um arquivo tar.gz compactado de /etc e salve em /backup com nome 'etc-backup-$(date +%Y%m%d).tar.gz'.",
+        comando: "tar -czf /backup/etc-backup-$(date +%Y%m%d).tar.gz /etc",
+        solucao: "Verifique com: ls -lh /backup/\nDeve mostrar o arquivo criado"
+    },
+    {
+        id: 10,
+        node: 1,
+        topico: "Usuários",
+        dificuldade: "Fácil",
+        titulo: "Usuário Alex e Grupo Time-TI",
+        descricao: "Crie o grupo 'time-ti' e o usuário 'alex' como membro deste grupo. Defina o shell como /bin/bash.",
+        comando: "groupadd time-ti\nuseradd -g time-ti -s /bin/bash alex",
+        solucao: "Verifique com: id alex\nDeve mostrar: groups=time-ti"
+    },
+    {
+        id: 11,
+        node: 1,
+        topico: "Usuários",
+        dificuldade: "Fácil",
+        titulo: "Criar Usuário John com UID 3000",
+        descricao: "Crie o usuário 'john' com UID 3000, comentário 'John Developer' e diretório home /home/johndev.",
+        comando: "useradd -u 3000 -c 'John Developer' -d /home/johndev -m john",
+        solucao: "Verifique com: getent passwd john\nDeve mostrar: john:x:3000:3000:John Developer:/home/johndev:/bin/bash"
+    },
+    {
+        id: 12,
+        node: 1,
+        topico: "Arquivos",
+        dificuldade: "Médio",
+        titulo: "Localizar Arquivos do Usuário tom",
+        descricao: "Encontre todos os arquivos no sistema pertencentes ao usuário 'tom' e copie a lista para /tmp/tom-files.txt.",
+        comando: "find / -user tom -type f 2>/dev/null > /tmp/tom-files.txt",
+        solucao: "Verifique com: head -5 /tmp/tom-files.txt\nO arquivo deve conter a lista"
+    },
+    {
+        id: 13,
+        node: 1,
+        topico: "Arquivos",
+        dificuldade: "Médio",
+        titulo: "Localizar Arquivos do Usuário jerry",
+        descricao: "Encontre todos os arquivos modificados nos últimos 7 dias pertencentes ao usuário 'jerry'.",
+        comando: "find / -user jerry -mtime -7 -type f 2>/dev/null",
+        solucao: "O comando listará todos os arquivos modificados nos últimos 7 dias"
+    },
+    {
+        id: 14,
+        node: 1,
+        topico: "Permissões",
+        dificuldade: "Médio",
+        titulo: "Diretório com Sticky Bit",
+        descricao: "Crie o diretório /public com permissão 1777 (sticky bit). Qualquer usuário pode criar arquivos, mas só o dono pode apagá-los.",
+        comando: "mkdir /public\nchmod 1777 /public",
+        solucao: "Verifique com: ls -ld /public\nDeve mostrar: drwxrwxrwt"
+    },
+    {
+        id: 15,
+        node: 1,
+        topico: "Scripting",
+        dificuldade: "Difícil",
+        titulo: "Script para Localizar Arquivos e SGID",
+        descricao: "Crie um script que encontre todos os arquivos com permissão SGID no sistema e salve em /tmp/sgid-files.txt.",
+        comando: "vim /usr/local/bin/find-sgid.sh",
+        solucao: "Conteúdo do script:\n#!/bin/bash\nfind / -perm -2000 -type f 2>/dev/null > /tmp/sgid-files.txt\necho 'Lista salva em /tmp/sgid-files.txt'\n\nDê permissão: chmod +x /usr/local/bin/find-sgid.sh"
+    },
+
+    // NODE 2 - Questões 16 a 22
+    {
+        id: 16,
+        node: 2,
+        topico: "Segurança",
+        dificuldade: "Difícil",
+        titulo: "Recuperar Senha Root",
+        descricao: "Recupere o acesso ao sistema redefinindo a senha do root sem conhecer a senha atual.",
+        comando: "1. Reinicie o sistema\n2. No GRUB, pressione 'e' para editar\n3. Adicione 'rd.break' no final da linha linux\n4. Pressione Ctrl+X\n5. Execute: mount -o remount,rw /sysroot\n6. chroot /sysroot\n7. passwd root\n8. touch /.autorelabel\n9. exit\n10. reboot",
+        solucao: "Após reboot, faça login como root com a nova senha"
+    },
+    {
+        id: 17,
+        node: 2,
+        topico: "Contêineres",
+        dificuldade: "Médio",
+        titulo: "Criar Imagem de Contêiner",
+        descricao: "Crie uma imagem Docker/Podman com Nginx e uma página HTML personalizada. A imagem deve ser taggeada como 'my-nginx:v1'.",
+        comando: "vim Dockerfile\n# Conteúdo:\nFROM nginx:alpine\nCOPY index.html /usr/share/nginx/html/\n\npodman build -t my-nginx:v1 .",
+        solucao: "Verifique com: podman images\nExecute: podman run -d -p 8080:80 my-nginx:v1"
+    },
+    {
+        id: 18,
+        node: 2,
+        topico: "Contêineres",
+        dificuldade: "Difícil",
+        titulo: "Criar Contêiner sem Raiz",
+        descricao: "Configure o Podman para rodar contêineres sem privilégios de root (rootless). Crie e execute um contêiner Alpine.",
+        comando: "echo 'seu_usuario:100000:65536' >> /etc/subuid\necho 'seu_usuario:100000:65536' >> /etc/subgid\n\npodman run --rm -it alpine sh",
+        solucao: "Verifique com: podman info | grep -A5 rootless\nDeve mostrar 'rootless: true'"
+    },
+    {
+        id: 19,
+        node: 2,
+        topico: "Storage",
+        dificuldade: "Médio",
+        titulo: "Criar Partição SWAP",
+        descricao: "Crie uma partição SWAP de 2GB em /dev/sdc1, ative-a e configure para montar automaticamente na inicialização.",
+        comando: "mkswap /dev/sdc1\nswapon /dev/sdc1\necho '/dev/sdc1 swap swap defaults 0 0' >> /etc/fstab",
+        solucao: "Verifique com: swapon --show\nfree -h deve mostrar a swap ativa"
+    },
+    {
+        id: 20,
+        node: 2,
+        topico: "Storage",
+        dificuldade: "Difícil",
+        titulo: "Volume Lógico com Extensões Específicas",
+        descricao: "Crie um volume lógico usando 10 extensões físicas de 64MB cada (total 640MB) no grupo de volumes 'appvg'.",
+        comando: "lvcreate -l 10 -n applv appvg\n# Ou especificando tamanho: lvcreate -L 640M -n applv appvg",
+        solucao: "Verifique com: lvs\nDeve mostrar o LV com ~640MB"
+    },
+    {
+        id: 21,
+        node: 2,
+        topico: "Performance",
+        dificuldade: "Fácil",
+        titulo: "Configurar Tuned",
+        descricao: "Instale o pacote tuned, configure o perfil 'throughput-performance' e ative o serviço tuned.",
+        comando: "yum install tuned -y\ntuned-adm profile throughput-performance\nsystemctl enable --now tuned",
+        solucao: "Verifique com: tuned-adm active\nDeve mostrar: throughput-performance"
+    },
     {
         id: 22,
         node: 2,
         topico: "Permissões",
         dificuldade: "Médio",
         titulo: "Diretório Colaborativo com SGID",
-        descricao: "Crie um diretório onde todos os arquivos herdem o grupo.",
-        comando: "mkdir /shared && chmod 2775 /shared && chown :developers /shared",
-        solucao: "Verifique: ls -ld /shared deve mostrar drwxrwsr-x"
+        descricao: "Crie o diretório /collab com SGID. Todos os arquivos criados devem herdar o grupo 'developers'.",
+        comando: "mkdir /collab\nchgrp developers /collab\nchmod 2775 /collab",
+        solucao: "Verifique com: ls -ld /collab\nDeve mostrar: drwxrwsr-x\nTeste criando arquivo e veja o grupo"
     }
 ];
-
-// Carregar questões na página
-function carregarQuestoes() {
-    const container = document.getElementById('questoes-container');
-    container.innerHTML = '';
-    
-    const filtroNode = document.getElementById('filtroNode').value;
-    const filtroDificuldade = document.getElementById('filtroDificuldade').value;
-    const filtroTopico = document.getElementById('filtroTopico').value;
-    
-    const questoesFiltradas = questoes.filter(q => {
-        return (filtroNode === 'all' || q.node == filtroNode) &&
-               (filtroDificuldade === 'all' || q.dificuldade === filtroDificuldade) &&
-               (filtroTopico === 'all' || q.topico === filtroTopico);
-    });
-    
-    if (questoesFiltradas.length === 0) {
-        container.innerHTML = `
-            <div class="col-12 text-center">
-                <div class="alert alert-info">
-                    <i class="fas fa-info-circle"></i> Nenhuma questão encontrada com os filtros atuais.
-                </div>
-            </div>
-        `;
-        return;
-    }
-    
-    questoesFiltradas.forEach(questao => {
-        const card = criarCardQuestao(questao);
-        container.innerHTML += card;
-    });
-    
-    // Adicionar event listeners aos botões
-    adicionarEventListeners();
-}
-
-// Criar card HTML para uma questão
-function criarCardQuestao(questao) {
-    const dificuldadeClass = `dificuldade-${questao.dificuldade.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, "")}`;
-    
-    return `
-        <div class="col-md-6 col-lg-4">
-            <div class="questao-card" data-id="${questao.id}">
-                <div class="questao-header">
-                    <div>
-                        <h5 class="mb-1">Questão ${questao.id}</h5>
-                        <small class="questao-id">Node ${questao.node} • ${questao.topico}</small>
-                    </div>
-                    <span class="dificuldade ${dificuldadeClass}">${questao.dificuldade}</span>
-                </div>
-                
-                <h6>${questao.titulo}</h6>
-                <p class="text-muted">${questao.descricao}</p>
-                
-                <div class="mt-3">
-                    <button class="btn btn-sm btn-outline-primary ver-detalhes" data-id="${questao.id}">
-                        <i class="fas fa-eye"></i> Ver Detalhes
-                    </button>
-                    <button class="btn btn-sm btn-terminal ms-2" onclick="window.location.href='terminal.html?questao=${questao.id}'">
-                        <i class="fas fa-terminal"></i> Abrir Terminal
-                    </button>
-                </div>
-                
-                <div class="progress mt-3" style="display: none;">
-                    <div class="progress-bar" role="progressbar" style="width: 0%"></div>
-                </div>
-            </div>
-        </div>
-    `;
-}
-
-// Adicionar event listeners
-function adicionarEventListeners() {
-    // Botões "Ver Detalhes"
-    document.querySelectorAll('.ver-detalhes').forEach(btn => {
-        btn.addEventListener('click', function() {
-            const id = this.getAttribute('data-id');
-            mostrarDetalhesQuestao(id);
-        });
-    });
-    
-    // Filtros
-    document.getElementById('filtroNode').addEventListener('change', carregarQuestoes);
-    document.getElementById('filtroDificuldade').addEventListener('change', carregarQuestoes);
-    document.getElementById('filtroTopico').addEventListener('change', carregarQuestoes);
-    
-    // Botão Reset
-    document.getElementById('btnReset').addEventListener('click', function() {
-        document.getElementById('filtroNode').value = 'all';
-        document.getElementById('filtroDificuldade').value = 'all';
-        document.getElementById('filtroTopico').value = 'all';
-        carregarQuestoes();
-    });
-}
-
-// Mostrar detalhes da questão em modal
-function mostrarDetalhesQuestao(id) {
-    const questao = questoes.find(q => q.id == id);
-    
-    const modalHTML = `
-        <div class="modal fade" id="modalQuestao" tabindex="-1">
-            <div class="modal-dialog modal-lg">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title">Questão ${questao.id}: ${questao.titulo}</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                    </div>
-                    <div class="modal-body">
-                        <div class="row mb-3">
-                            <div class="col-md-3">
-                                <strong>Node:</strong> ${questao.node}
-                            </div>
-                            <div class="col-md-3">
-                                <strong>Tópico:</strong> ${questao.topico}
-                            </div>
-                            <div class="col-md-3">
-                                <strong>Dificuldade:</strong> ${questao.dificuldade}
-                            </div>
-                        </div>
-                        
-                        <h6>Descrição:</h6>
-                        <p>${questao.descricao}</p>
-                        
-                        <h6 class="mt-3">Comando Sugerido:</h6>
-                        <div class="bg-dark text-light p-3 rounded">
-                            <code>${questao.comando}</code>
-                        </div>
-                        
-                        <h6 class="mt-3">Solução Esperada:</h6>
-                        <div class="bg-light p-3 rounded">
-                            <pre>${questao.solucao}</pre>
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
-                        <button type="button" class="btn btn-primary" onclick="marcarComoConcluida(${questao.id})">
-                            <i class="fas fa-check"></i> Marcar como Concluída
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    `;
-    
-    // Adicionar modal ao body
-    document.body.insertAdjacentHTML('beforeend', modalHTML);
-    
-    // Mostrar modal
-    const modal = new bootstrap.Modal(document.getElementById('modalQuestao'));
-    modal.show();
-    
-    // Remover modal quando fechar
-    document.getElementById('modalQuestao').addEventListener('hidden.bs.modal', function() {
-        this.remove();
-    });
-}
-
-// Marcar questão como concluída
-function marcarComoConcluida(id) {
-    // Salvar no localStorage
-    let progresso = JSON.parse(localStorage.getItem('rhcsa-progresso') || '{}');
-    progresso[id] = true;
-    localStorage.setItem('rhcsa-progresso', JSON.stringify(progresso));
-    
-    // Atualizar interface
-    const card = document.querySelector(`.questao-card[data-id="${id}"]`);
-    if (card) {
-        const progressBar = card.querySelector('.progress');
-        const bar = progressBar.querySelector('.progress-bar');
-        
-        progressBar.style.display = 'block';
-        bar.style.width = '100%';
-        bar.classList.add('bg-success');
-        bar.textContent = 'Concluído ✓';
-    }
-    
-    // Fechar modal
-    const modal = bootstrap.Modal.getInstance(document.getElementById('modalQuestao'));
-    modal.hide();
-    
-    alert('✅ Questão marcada como concluída!');
-}
-
-// Inicializar quando a página carregar
-document.addEventListener('DOMContentLoaded', function() {
-    carregarQuestoes();
-    
-    // Verificar progresso salvo
-    atualizarProgressoVisual();
-});
-
-// Atualizar visual do progresso
-function atualizarProgressoVisual() {
-    const progresso = JSON.parse(localStorage.getItem('rhcsa-progresso') || '{}');
-    
-    Object.keys(progresso).forEach(id => {
-        const card = document.querySelector(`.questao-card[data-id="${id}"]`);
-        if (card) {
-            const progressBar = card.querySelector('.progress');
-            const bar = progressBar.querySelector('.progress-bar');
-            
-            if (progressBar && bar) {
-                progressBar.style.display = 'block';
-                bar.style.width = '100%';
-                bar.classList.add('bg-success');
-                bar.textContent = 'Concluído ✓';
-            }
-        }
-    });
-}
