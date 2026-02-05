@@ -175,6 +175,132 @@
         }
         
         /* Responsividade */
+        /* DARK MODE */
+        body.dark-mode {
+            background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+            color: #e0e0e0;
+        }
+        
+        body.dark-mode .card {
+            background: #2d2d2d;
+            color: #e0e0e0;
+            border-color: #444;
+        }
+        
+        body.dark-mode .card-header {
+            background: #1a1a1a !important;
+            border-color: #444;
+            color: #e0e0e0;
+        }
+        
+        body.dark-mode .tab-content {
+            background: #2d2d2d;
+            color: #e0e0e0;
+            border-color: #444;
+        }
+        
+        body.dark-mode .form-control,
+        body.dark-mode .form-select {
+            background: #1a1a1a;
+            color: #e0e0e0;
+            border-color: #444;
+        }
+        
+        body.dark-mode .form-control:focus,
+        body.dark-mode .form-select:focus {
+            background: #2d2d2d;
+            color: #e0e0e0;
+            border-color: #0d6efd;
+            box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
+        }
+        
+        body.dark-mode .table {
+            color: #e0e0e0;
+            border-color: #444;
+        }
+        
+        body.dark-mode .table thead {
+            background: #1a1a1a;
+            color: #e0e0e0;
+        }
+        
+        body.dark-mode .table tbody tr:hover {
+            background: #3d3d3d;
+        }
+        
+        body.dark-mode .btn-outline-secondary {
+            color: #e0e0e0;
+            border-color: #666;
+        }
+        
+        body.dark-mode .btn-outline-secondary:hover {
+            background: #666;
+            border-color: #666;
+        }
+        
+        body.dark-mode .hero-section {
+            background: linear-gradient(135deg, #1a1a1a 0%, #3d3d3d 100%);
+        }
+        
+        body.dark-mode .badge {
+            opacity: 0.85;
+        }
+        
+        body.dark-mode .list-group-item {
+            background: #2d2d2d;
+            color: #e0e0e0;
+            border-color: #444;
+        }
+        
+        body.dark-mode .list-group-item-action:hover {
+            background: #3d3d3d;
+        }
+        
+        body.dark-mode .text-muted {
+            color: #999 !important;
+        }
+        
+        body.dark-mode .nav-tabs .nav-link {
+            color: #999;
+        }
+        
+        body.dark-mode .nav-tabs .nav-link.active {
+            color: #e0e0e0;
+            background: #2d2d2d;
+        }
+        
+        body.dark-mode .table-responsive {
+            background: #2d2d2d;
+            border-color: #444;
+        }
+        
+        body.dark-mode .modal-content {
+            background: #2d2d2d;
+            color: #e0e0e0;
+        }
+        
+        body.dark-mode .modal-header {
+            border-color: #444;
+        }
+        
+        body.dark-mode .progress {
+            background: #1a1a1a;
+        }
+        
+        body.dark-mode .progress-bar {
+            background-color: #28a745;
+        }
+        
+        footer {
+        
+        #darkModeToggle {
+            transition: all 0.3s ease;
+        }
+        
+        #darkModeToggle:hover {
+            background-color: #555 !important;
+        }
+        
         @media (max-width: 768px) {
             .hero-section {
                 padding: 60px 0;
@@ -198,9 +324,9 @@
                 <i class="fab fa-redhat"></i> RHCSA Study Lab
             </a>
             <div class="navbar-nav ms-auto">
-                <span class="nav-item nav-link">
-                    <i class="fas fa-user-graduate"></i> Modo Estudo
-                </span>
+                <button id="darkModeToggle" class="btn btn-dark nav-link" style="border: none; cursor: pointer;">
+                    <i class="fas fa-moon"></i> <span id="darkModeLabel">Modo Escuro</span>
+                </button>
             </div>
         </div>
     </nav>
@@ -219,19 +345,19 @@
                         <span class="badge bg-warning">Correção Automática</span>
                     </div>
                 </div>
-                <div class="col-md-4 text-center">
-                    <div class="progress-ring">
-                        <svg width="120" height="120">
-                            <circle class="progress-ring-bg" cx="60" cy="60" r="54" stroke="#e9ecef" stroke-width="8" fill="transparent"/>
-                            <circle class="progress-ring-circle" cx="60" cy="60" r="54" stroke="#28a745" stroke-width="8" 
-                                    stroke-dasharray="339.292" stroke-dashoffset="239.292" fill="transparent"/>
-                        </svg>
-                        <div class="position-absolute top-50 start-50 translate-middle">
-                            <h3 class="mb-0" id="progress-percent">0%</h3>
-                            <small>Concluído</small>
+                <div class="col-md-4">
+                    <div>
+                        <h5 class="mb-3">Seu Progresso</h5>
+                        <div class="progress" style="height: 30px; font-size: 0.9rem;">
+                            <div id="progress-bar" class="progress-bar progress-bar-striped progress-bar-animated" 
+                                 role="progressbar" style="width: 0%;" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">
+                                <span id="progress-percent">0%</span>
+                            </div>
                         </div>
+                        <small class="text-muted d-block mt-2">Questões Concluídas</small>
                     </div>
                 </div>
+              
             </div>
         </div>
     </section>
@@ -581,6 +707,32 @@
 
     <!-- JavaScript Principal -->
     <script>
+        // ==================== DARK MODE ====================
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const darkModeLabel = document.getElementById('darkModeLabel');
+        const htmlElement = document.documentElement;
+        
+        // Carregar preferência de dark mode
+        const isDarkMode = localStorage.getItem('rhcsa-dark-mode') === 'true';
+        if (isDarkMode) {
+            document.body.classList.add('dark-mode');
+            darkModeToggle.innerHTML = '<i class="fas fa-sun"></i> <span id="darkModeLabel">Modo Claro</span>';
+        }
+        
+        // Toggle dark mode
+        darkModeToggle.addEventListener('click', function() {
+            document.body.classList.toggle('dark-mode');
+            const isDark = document.body.classList.contains('dark-mode');
+            
+            localStorage.setItem('rhcsa-dark-mode', isDark);
+            
+            if (isDark) {
+                darkModeToggle.innerHTML = '<i class="fas fa-sun"></i> <span id="darkModeLabel">Modo Claro</span>';
+            } else {
+                darkModeToggle.innerHTML = '<i class="fas fa-moon"></i> <span id="darkModeLabel">Modo Escuro</span>';
+            }
+        });
+
         // ==================== DADOS DAS QUESTÕES ====================
         const questoes = [
             // NODE 1 - Questões 1 a 15
@@ -1175,15 +1327,11 @@ Para testar soluções das questões, use a aba "Questões" e clique em "Testar 
             document.getElementById('questoes-tentadas').textContent = tentadas;
             document.getElementById('progress-percent').textContent = `${percentual}%`;
             
-            // Atualizar círculo de progresso
-            const circle = document.querySelector('.progress-ring-circle');
-            const radius = 54;
-            const circumference = 2 * Math.PI * radius;
-            const offset = circumference - (percentual / 100) * circumference;
-            
-            if (circle) {
-                circle.style.strokeDasharray = `${circumference} ${circumference}`;
-                circle.style.strokeDashoffset = offset;
+            // Atualizar barra de progresso
+            const progressBar = document.getElementById('progress-bar');
+            if (progressBar) {
+                progressBar.style.width = `${percentual}%`;
+                progressBar.setAttribute('aria-valuenow', percentual);
             }
             
             // Atualizar gráficos
