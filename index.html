@@ -1,192 +1,219 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>🐧 RHCSA Study Lab</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="style.css">
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🐧</text></svg>">
+    <title>Teste RHCSA - SIMPLES</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; }
+        .questao { 
+            border: 1px solid #ddd; 
+            padding: 15px; 
+            margin: 10px 0; 
+            border-radius: 5px;
+        }
+        .facil { border-left: 5px solid green; }
+        .medio { border-left: 5px solid orange; }
+        .dificil { border-left: 5px solid red; }
+        .node1 { background: #f8f9fa; }
+        .node2 { background: #e9ecef; }
+    </style>
 </head>
 <body>
-    <!-- Navbar -->
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
-        <div class="container">
-            <a class="navbar-brand" href="#">
-                <i class="fab fa-redhat"></i> RHCSA Study Lab
-            </a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav ms-auto">
-                    <li class="nav-item"><a class="nav-link" href="#questoes"><i class="fas fa-tasks"></i> Questões</a></li>
-                    <li class="nav-item"><a class="nav-link" href="terminal.html"><i class="fas fa-terminal"></i> Terminal</a></li>
-                    <li class="nav-item"><a class="nav-link" href="dashboard.html"><i class="fas fa-chart-bar"></i> Dashboard</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#sobre"><i class="fas fa-info-circle"></i> Sobre</a></li>
-                </ul>
-            </div>
-        </div>
-    </nav>
+    <h1>🐧 RHCSA Study Lab - TESTE SIMPLES</h1>
+    <p>Total de questões: <span id="total">0</span></p>
+    <div id="container"></div>
 
-    <!-- Hero Section -->
-    <header class="hero-section text-center">
-        <div class="container">
-            <h1 class="display-4 mt-5 pt-4">🐧 RHCSA Study Lab</h1>
-            <p class="lead">Laboratório virtual completo para estudo do exame RHCSA</p>
-           <div class="badges mt-3">
-    <span class="badge bg-danger">Red Hat Certified System Administrator</span>
-    <span class="badge bg-primary" id="total-questoes-badge">22 Questões</span>
-    <span class="badge bg-success">Terminal Interativo</span>
-    <span class="badge bg-warning">100% Gratuito</span>
-          </div>
-            <div class="mt-4">
-                <a href="#questoes" class="btn btn-lg btn-danger me-2"><i class="fas fa-play-circle"></i> Começar Agora</a>
-                <a href="https://github.com/SEU_USUARIO/rhcsa-study-lab" target="_blank" class="btn btn-lg btn-outline-light">
-                    <i class="fab fa-github"></i> Ver Código
-                </a>
-            </div>
-        </div>
-    </header>
+    <script>
+        // Dados COMPLETOS das 22 questões
+        const questoes = [
+            {
+                id: 1, node: 1, topico: "Rede", dificuldade: "Fácil",
+                titulo: "Configurar IP Estático",
+                descricao: "Configure um endereço IP estático para sua máquina.",
+                comando: "nmcli connection modify eth0 ipv4.addresses 192.168.1.100/24",
+                solucao: "Verifique com: ip addr show eth0"
+            },
+            {
+                id: 2, node: 1, topico: "Pacotes", dificuldade: "Fácil",
+                titulo: "Configurar YUM Repository",
+                descricao: "Configure um repositório YUM local.",
+                comando: "sudo vim /etc/yum.repos.d/local.repo",
+                solucao: "Conteúdo: [local]\nname=Local Repo\nbaseurl=file:///mnt\nenabled=1\ngpgcheck=0"
+            },
+            {
+                id: 3, node: 1, topico: "Permissões", dificuldade: "Médio",
+                titulo: "Diretório com ACL",
+                descricao: "Crie o diretório /shared com permissões 770.",
+                comando: "mkdir /shared && chmod 770 /shared && setfacl -m u:alex:rwx /shared",
+                solucao: "Verifique com: getfacl /shared"
+            },
+            {
+                id: 4, node: 1, topico: "Usuários", dificuldade: "Fácil",
+                titulo: "Criar usuário Redhat",
+                descricao: "Crie um usuário chamado 'redhat' com UID 2000.",
+                comando: "useradd -u 2000 redhat",
+                solucao: "Verifique com: id redhat"
+            },
+            {
+                id: 5, node: 1, topico: "Rede", dificuldade: "Médio",
+                titulo: "SSH sem senha",
+                descricao: "Configure SSH para login sem senha.",
+                comando: "ssh-keygen && ssh-copy-id user@host",
+                solucao: "Teste com: ssh user@host"
+            },
+            {
+                id: 6, node: 1, topico: "Serviços", dificuldade: "Médio",
+                titulo: "Servidor Web na porta 82",
+                descricao: "Configure Apache na porta 82.",
+                comando: "vim /etc/httpd/conf/httpd.conf",
+                solucao: "Mude Listen 80 para Listen 82"
+            },
+            {
+                id: 7, node: 1, topico: "Storage", dificuldade: "Difícil",
+                titulo: "Volume Lógico LVM",
+                descricao: "Crie volume LVM de 5GB.",
+                comando: "pvcreate /dev/sdb1 && vgcreate vg01 /dev/sdb1 && lvcreate -L 5G -n lv01 vg01",
+                solucao: "Verifique com: lvs"
+            },
+            {
+                id: 8, node: 1, topico: "Agendamento", dificuldade: "Fácil",
+                titulo: "Cronjob para devuser",
+                descricao: "Configure cronjob diário às 2:30 AM.",
+                comando: "crontab -u devuser -e",
+                solucao: "Adicione: 30 2 * * * /opt/backup.sh"
+            },
+            {
+                id: 9, node: 1, topico: "Arquivos", dificuldade: "Fácil",
+                titulo: "Compactar diretório /etc",
+                descricao: "Crie backup do /etc.",
+                comando: "tar -czf /backup/etc-backup.tar.gz /etc",
+                solucao: "Verifique com: ls -lh /backup/"
+            },
+            {
+                id: 10, node: 1, topico: "Usuários", dificuldade: "Fácil",
+                titulo: "Usuário Alex e grupo Time-TI",
+                descricao: "Crie usuário alex no grupo time-ti.",
+                comando: "groupadd time-ti && useradd -g time-ti alex",
+                solucao: "Verifique com: id alex"
+            },
+            {
+                id: 11, node: 1, topico: "Usuários", dificuldade: "Fácil",
+                titulo: "Criar usuário John com UID 3000",
+                descricao: "Crie usuário john com UID específico.",
+                comando: "useradd -u 3000 john",
+                solucao: "Verifique com: getent passwd john"
+            },
+            {
+                id: 12, node: 1, topico: "Arquivos", dificuldade: "Médio",
+                titulo: "Localizar arquivos do usuário tom",
+                descricao: "Encontre arquivos do usuário tom.",
+                comando: "find / -user tom -type f 2>/dev/null",
+                solucao: "Salve em: > /tmp/tom-files.txt"
+            },
+            {
+                id: 13, node: 1, topico: "Arquivos", dificuldade: "Médio",
+                titulo: "Localizar arquivos do usuário jerry",
+                descricao: "Encontre arquivos do usuário jerry.",
+                comando: "find / -user jerry -type f 2>/dev/null",
+                solucao: "Liste arquivos recentes"
+            },
+            {
+                id: 14, node: 1, topico: "Permissões", dificuldade: "Médio",
+                titulo: "Diretório com sticky bit",
+                descricao: "Crie diretório com sticky bit.",
+                comando: "mkdir /public && chmod 1777 /public",
+                solucao: "Verifique com: ls -ld /public"
+            },
+            {
+                id: 15, node: 1, topico: "Scripting", dificuldade: "Difícil",
+                titulo: "Script para localizar arquivos e SGID",
+                descricao: "Crie script para encontrar arquivos SGID.",
+                comando: "vim /usr/local/bin/find-sgid.sh",
+                solucao: "Script: find / -perm -2000 -type f 2>/dev/null"
+            },
+            {
+                id: 16, node: 2, topico: "Segurança", dificuldade: "Difícil",
+                titulo: "Recuperar senha root",
+                descricao: "Redefina senha root sem saber a atual.",
+                comando: "rd.break no GRUB",
+                solucao: "Siga passos de recuperação"
+            },
+            {
+                id: 17, node: 2, topico: "Contêineres", dificuldade: "Médio",
+                titulo: "Criar imagem de contêiner",
+                descricao: "Crie imagem Docker com Nginx.",
+                comando: "vim Dockerfile",
+                solucao: "FROM nginx:alpine"
+            },
+            {
+                id: 18, node: 2, topico: "Contêineres", dificuldade: "Difícil",
+                titulo: "Criar contêiner sem raiz",
+                descricao: "Configure Podman rootless.",
+                comando: "podman run --rm alpine",
+                solucao: "Configure subuid/subgid"
+            },
+            {
+                id: 19, node: 2, topico: "Storage", dificuldade: "Médio",
+                titulo: "Criar partição SWAP",
+                descricao: "Crie e ative partição SWAP.",
+                comando: "mkswap /dev/sdc1 && swapon /dev/sdc1",
+                solucao: "Adicione ao /etc/fstab"
+            },
+            {
+                id: 20, node: 2, topico: "Storage", dificuldade: "Difícil",
+                titulo: "Volume Lógico com extensões específicas",
+                descricao: "Crie LV com 10 extensões.",
+                comando: "lvcreate -l 10 -n lv02 vg01",
+                solucao: "Verifique com: lvs"
+            },
+            {
+                id: 21, node: 2, topico: "Performance", dificuldade: "Fácil",
+                titulo: "Configurar tuned",
+                descricao: "Configure perfil de performance.",
+                comando: "tuned-adm profile throughput-performance",
+                solucao: "Ative serviço: systemctl enable tuned"
+            },
+            {
+                id: 22, node: 2, topico: "Permissões", dificuldade: "Médio",
+                titulo: "Diretório colaborativo com SGID",
+                descricao: "Crie diretório com SGID.",
+                comando: "mkdir /collab && chmod 2775 /collab",
+                solucao: "Verifique com: ls -ld /collab"
+            }
+        ];
 
-    <!-- Questões Section -->
-    <section id="questoes" class="py-5">
-        <div class="container">
-            <h2 class="text-center mb-4"><i class="fas fa-tasks"></i> Questões do Exame</h2>
+        // Função para mostrar questões
+        function mostrarQuestoes() {
+            const container = document.getElementById('container');
+            const totalSpan = document.getElementById('total');
             
-            <!-- Filtros -->
-            <div class="row mb-4">
-                <div class="col-md-3">
-                    <select id="filtroNode" class="form-select">
-                        <option value="all">Todos os Nodes</option>
-                        <option value="1">Node 1 (1-15)</option>
-                        <option value="2">Node 2 (16-22)</option>
-                    </select>
+            totalSpan.textContent = questoes.length;
+            
+            let html = '';
+            
+            questoes.forEach(q => {
+                const classeDificuldade = q.dificuldade.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, "");
+                
+                html += `
+                <div class="questao ${classeDificuldade} node${q.node}">
+                    <h3>Questão ${q.id}: ${q.titulo}</h3>
+                    <p><strong>Node:</strong> ${q.node} | 
+                       <strong>Tópico:</strong> ${q.topico} | 
+                       <strong>Dificuldade:</strong> ${q.dificuldade}</p>
+                    <p>${q.descricao}</p>
+                    <p><strong>Comando:</strong> <code>${q.comando}</code></p>
                 </div>
-                <div class="col-md-3">
-                    <select id="filtroDificuldade" class="form-select">
-                        <option value="all">Todas Dificuldades</option>
-                        <option value="Fácil">Fácil</option>
-                        <option value="Médio">Médio</option>
-                        <option value="Difícil">Difícil</option>
-                    </select>
-                </div>
-                <div class="col-md-3">
-                    <select id="filtroTopico" class="form-select">
-                        <option value="all">Todos Tópicos</option>
-                        <option value="Rede">Rede</option>
-                        <option value="Usuários">Usuários</option>
-                        <option value="Permissões">Permissões</option>
-                        <option value="Storage">Storage</option>
-                    </select>
-                </div>
-                <div class="col-md-3">
-                    <button id="btnReset" class="btn btn-outline-secondary w-100">
-                        <i class="fas fa-redo"></i> Resetar Filtros
-                    </button>
-                </div>
-            </div>
+                `;
+            });
+            
+            container.innerHTML = html;
+            
+            // Log no console para debug
+            console.log('Total de questões:', questoes.length);
+            console.log('Primeira questão:', questoes[0]);
+        }
 
-            <!-- Container das Questões -->
-            <div id="questoes-container" class="row">
-                <!-- As questões serão carregadas via JavaScript -->
-            </div>
-        </div>
-    </section>
-
-    <!-- Features -->
-    <section class="bg-light py-5">
-        <div class="container">
-            <h2 class="text-center mb-4"><i class="fas fa-star"></i> Recursos</h2>
-            <div class="row text-center">
-                <div class="col-md-4 mb-4">
-                    <div class="feature-card p-4">
-                        <i class="fas fa-terminal fa-3x text-primary mb-3"></i>
-                        <h4>Terminal Interativo</h4>
-                        <p>Mais de 40 comandos Linux para praticar diretamente no navegador</p>
-                    </div>
-                </div>
-                <div class="col-md-4 mb-4">
-                    <div class="feature-card p-4">
-                        <i class="fas fa-chart-line fa-3x text-success mb-3"></i>
-                        <h4>Dashboard Visual</h4>
-                        <p>Acompanhe seu progresso com gráficos e estatísticas detalhadas</p>
-                    </div>
-                </div>
-                <div class="col-md-4 mb-4">
-                    <div class="feature-card p-4">
-                        <i class="fas fa-check-circle fa-3x text-danger mb-3"></i>
-                        <h4>Verificação Imediata</h4>
-                        <p>Feedback instantâneo para cada questão resolvida</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Sobre -->
-    <section id="sobre" class="py-5">
-        <div class="container">
-            <h2 class="text-center mb-4"><i class="fas fa-info-circle"></i> Sobre o Projeto</h2>
-            <div class="row">
-                <div class="col-md-6">
-                    <h4>🎯 Objetivo</h4>
-                    <p>Este laboratório virtual foi desenvolvido para ajudar estudantes a se prepararem para o exame RHCSA (Red Hat Certified System Administrator) de forma prática e interativa.</p>
-                    
-                    <h4 class="mt-4">🛠️ Tecnologias</h4>
-                    <ul>
-                        <li>HTML5, CSS3, JavaScript (Frontend)</li>
-                        <li>Bootstrap 5 (Design Responsivo)</li>
-                        <li>Chart.js (Gráficos do Dashboard)</li>
-                        <li>GitHub Pages (Hospedagem)</li>
-                    </ul>
-                </div>
-                <div class="col-md-6">
-                    <h4>📚 Como Usar</h4>
-                    <ol>
-                        <li>Escolha uma questão na lista</li>
-                        <li>Leia a descrição e requisitos</li>
-                        <li>Use o terminal para executar comandos</li>
-                        <li>Verifique sua solução</li>
-                        <li>Acompanhe seu progresso no dashboard</li>
-                    </ol>
-                    
-                    <div class="alert alert-info mt-4">
-                        <i class="fas fa-exclamation-circle"></i> 
-                        <strong>Importante:</strong> Este é um simulador educativo. Para o exame real, pratique em uma máquina Red Hat/CentOS.
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Footer -->
-    <footer class="bg-dark text-white py-4">
-        <div class="container">
-            <div class="row">
-                <div class="col-md-6">
-                    <h5><i class="fab fa-redhat"></i> RHCSA Study Lab</h5>
-                    <p>Laboratório virtual para estudo do exame RHCSA</p>
-                </div>
-                <div class="col-md-6 text-md-end">
-                    <p>
-                        Desenvolvido com ❤️ para a comunidade Linux
-                        <br>
-                        <a href="https://github.com/SEU_USUARIO/rhcsa-study-lab" class="text-white">
-                            <i class="fab fa-github"></i> GitHub
-                        </a> | 
-                        <a href="#" class="text-white" onclick="alert('Versão 3.0 - Março 2024')">
-                            <i class="fas fa-code"></i> v3.0
-                        </a>
-                    </p>
-                </div>
-            </div>
-        </div>
-    </footer>
-
-    <!-- Scripts -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="script.js"></script>
+        // Executar quando a página carregar
+        document.addEventListener('DOMContentLoaded', mostrarQuestoes);
+    </script>
 </body>
 </html>
