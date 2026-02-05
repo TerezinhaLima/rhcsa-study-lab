@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🐧 RHCSA Study Lab</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🐧</text></svg>">
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+        <div class="container">
+            <a class="navbar-brand" href="#">
+                <i class="fab fa-redhat"></i> RHCSA Study Lab
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item"><a class="nav-link" href="#questoes"><i class="fas fa-tasks"></i> Questões</a></li>
+                    <li class="nav-item"><a class="nav-link" href="terminal.html"><i class="fas fa-terminal"></i> Terminal</a></li>
+                    <li class="nav-item"><a class="nav-link" href="dashboard.html"><i class="fas fa-chart-bar"></i> Dashboard</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#sobre"><i class="fas fa-info-circle"></i> Sobre</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <header class="hero-section text-center">
+        <div class="container">
+            <h1 class="display-4 mt-5 pt-4">🐧 RHCSA Study Lab</h1>
+            <p class="lead">Laboratório virtual completo para estudo do exame RHCSA</p>
+            <div class="badges mt-3">
+                <span class="badge bg-danger">Red Hat Certified System Administrator</span>
+                <span class="badge bg-primary">22 Questões</span>
+                <span class="badge bg-success">Terminal Interativo</span>
+                <span class="badge bg-warning">100% Gratuito</span>
+            </div>
+            <div class="mt-4">
+                <a href="#questoes" class="btn btn-lg btn-danger me-2"><i class="fas fa-play-circle"></i> Começar Agora</a>
+                <a href="https://github.com/SEU_USUARIO/rhcsa-study-lab" target="_blank" class="btn btn-lg btn-outline-light">
+                    <i class="fab fa-github"></i> Ver Código
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Questões Section -->
+    <section id="questoes" class="py-5">
+        <div class="container">
+            <h2 class="text-center mb-4"><i class="fas fa-tasks"></i> Questões do Exame</h2>
+            
+            <!-- Filtros -->
+            <div class="row mb-4">
+                <div class="col-md-3">
+                    <select id="filtroNode" class="form-select">
+                        <option value="all">Todos os Nodes</option>
+                        <option value="1">Node 1 (1-15)</option>
+                        <option value="2">Node 2 (16-22)</option>
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <select id="filtroDificuldade" class="form-select">
+                        <option value="all">Todas Dificuldades</option>
+                        <option value="Fácil">Fácil</option>
+                        <option value="Médio">Médio</option>
+                        <option value="Difícil">Difícil</option>
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <select id="filtroTopico" class="form-select">
+                        <option value="all">Todos Tópicos</option>
+                        <option value="Rede">Rede</option>
+                        <option value="Usuários">Usuários</option>
+                        <option value="Permissões">Permissões</option>
+                        <option value="Storage">Storage</option>
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <button id="btnReset" class="btn btn-outline-secondary w-100">
+                        <i class="fas fa-redo"></i> Resetar Filtros
+                    </button>
+                </div>
+            </div>
+
+            <!-- Container das Questões -->
+            <div id="questoes-container" class="row">
+                <!-- As questões serão carregadas via JavaScript -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Features -->
+    <section class="bg-light py-5">
+        <div class="container">
+            <h2 class="text-center mb-4"><i class="fas fa-star"></i> Recursos</h2>
+            <div class="row text-center">
+                <div class="col-md-4 mb-4">
+                    <div class="feature-card p-4">
+                        <i class="fas fa-terminal fa-3x text-primary mb-3"></i>
+                        <h4>Terminal Interativo</h4>
+                        <p>Mais de 40 comandos Linux para praticar diretamente no navegador</p>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-4">
+                    <div class="feature-card p-4">
+                        <i class="fas fa-chart-line fa-3x text-success mb-3"></i>
+                        <h4>Dashboard Visual</h4>
+                        <p>Acompanhe seu progresso com gráficos e estatísticas detalhadas</p>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-4">
+                    <div class="feature-card p-4">
+                        <i class="fas fa-check-circle fa-3x text-danger mb-3"></i>
+                        <h4>Verificação Imediata</h4>
+                        <p>Feedback instantâneo para cada questão resolvida</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Sobre -->
+    <section id="sobre" class="py-5">
+        <div class="container">
+            <h2 class="text-center mb-4"><i class="fas fa-info-circle"></i> Sobre o Projeto</h2>
+            <div class="row">
+                <div class="col-md-6">
+                    <h4>🎯 Objetivo</h4>
+                    <p>Este laboratório virtual foi desenvolvido para ajudar estudantes a se prepararem para o exame RHCSA (Red Hat Certified System Administrator) de forma prática e interativa.</p>
+                    
+                    <h4 class="mt-4">🛠️ Tecnologias</h4>
+                    <ul>
+                        <li>HTML5, CSS3, JavaScript (Frontend)</li>
+                        <li>Bootstrap 5 (Design Responsivo)</li>
+                        <li>Chart.js (Gráficos do Dashboard)</li>
+                        <li>GitHub Pages (Hospedagem)</li>
+                    </ul>
+                </div>
+                <div class="col-md-6">
+                    <h4>📚 Como Usar</h4>
+                    <ol>
+                        <li>Escolha uma questão na lista</li>
+                        <li>Leia a descrição e requisitos</li>
+                        <li>Use o terminal para executar comandos</li>
+                        <li>Verifique sua solução</li>
+                        <li>Acompanhe seu progresso no dashboard</li>
+                    </ol>
+                    
+                    <div class="alert alert-info mt-4">
+                        <i class="fas fa-exclamation-circle"></i> 
+                        <strong>Importante:</strong> Este é um simulador educativo. Para o exame real, pratique em uma máquina Red Hat/CentOS.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-dark text-white py-4">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6">
+                    <h5><i class="fab fa-redhat"></i> RHCSA Study Lab</h5>
+                    <p>Laboratório virtual para estudo do exame RHCSA</p>
+                </div>
+                <div class="col-md-6 text-md-end">
+                    <p>
+                        Desenvolvido com ❤️ para a comunidade Linux
+                        <br>
+                        <a href="https://github.com/SEU_USUARIO/rhcsa-study-lab" class="text-white">
+                            <i class="fab fa-github"></i> GitHub
+                        </a> | 
+                        <a href="#" class="text-white" onclick="alert('Versão 3.0 - Março 2024')">
+                            <i class="fas fa-code"></i> v3.0
+                        </a>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
