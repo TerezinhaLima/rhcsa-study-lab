@@ -68,4 +68,133 @@ root         3  0.0  0.0      0     0 ?        I<   10:00   0:00 [rcu_gp]`,
   free -h       - Memória e swap
   ps aux        - Processos em execução
   ls, pwd, date - Comandos básicos
-  clear        
+  clear         - Limpa a tela
+  help          - Mostra esta ajuda`
+};
+
+// Histórico de comandos
+let historico = [];
+let indiceHistorico = -1;
+
+// Executar comando
+function executarComando(cmd) {
+    const terminal = document.getElementById('terminal');
+    const input = document.getElementById('commandInput');
+    
+    // Adicionar ao histórico
+    if (cmd.trim()) {
+        historico.push(cmd);
+        indiceHistorico = historico.length;
+    }
+    
+    // Mostrar comando no terminal
+    const linhaComando = document.createElement('div');
+    linhaComando.className = 'terminal-line';
+    linhaComando.innerHTML = `<span class="prompt">[user@rhcsa-lab ~]$ </span><span class="command">${cmd}</span>`;
+    terminal.appendChild(linhaComando);
+    
+    // Processar comando
+    let saida = processarComando(cmd);
+    
+    // Mostrar saída
+    const linhaSaida = document.createElement('div');
+    linhaSaida.className = 'terminal-line';
+    linhaSaida.innerHTML = `<span class="output">${saida}</span>`;
+    terminal.appendChild(linhaSaida);
+    
+    // Scroll para baixo
+    terminal.scrollTop = terminal.scrollHeight;
+    
+    // Limpar input
+    input.value = '';
+}
+
+// Processar comando específico
+function processarComando(cmd) {
+    cmd = cmd.trim().toLowerCase();
+    
+    // Comandos especiais
+    if (cmd === 'clear') {
+        document.getElementById('terminal').innerHTML = '';
+        return '';
+    }
+    
+    if (cmd === 'exit') {
+        window.location.href = 'index.html';
+        return '';
+    }
+    
+    // Verificar se comando existe
+    const cmdKey = Object.keys(comandos).find(key => 
+        cmd.startsWith(key.toLowerCase())
+    );
+    
+    if (cmdKey) {
+        return comandos[cmdKey];
+    }
+    
+    // Comando não encontrado
+    return `bash: ${cmd}: command not found\nTry 'help' for available commands`;
+}
+
+// Executar do input
+function executarInput() {
+    const input = document.getElementById('commandInput');
+    const cmd = input.value.trim();
+    
+    if (cmd) {
+        executarComando(cmd);
+    }
+}
+
+// Executar custom command
+function executarCustom() {
+    const input = document.getElementById('customCommand');
+    const cmd = input.value.trim();
+    
+    if (cmd) {
+        executarComando(cmd);
+        input.value = '';
+    }
+}
+
+// Limpar terminal
+function limparTerminal() {
+    document.getElementById('terminal').innerHTML = `
+        <div class="terminal-line">
+            <span class="prompt">[user@rhcsa-lab ~]$ </span>
+            <span class="output">Terminal limpo. Digite 'help' para ver comandos disponíveis.</span>
+        </div>
+    `;
+}
+
+// Navegação no histórico com setas
+document.getElementById('commandInput').addEventListener('keydown', function(e) {
+    if (e.key === 'ArrowUp') {
+        e.preventDefault();
+        if (indiceHistorico > 0) {
+            indiceHistorico--;
+            this.value = historico[indiceHistorico];
+        }
+    } else if (e.key === 'ArrowDown') {
+        e.preventDefault();
+        if (indiceHistorico < historico.length - 1) {
+            indiceHistorico++;
+            this.value = historico[indiceHistorico];
+        } else {
+            indiceHistorico = historico.length;
+            this.value = '';
+        }
+    }
+});
+
+// Inicialização
+window.onload = function() {
+    // Verificar se há parâmetro de questão na URL
+    const urlParams = new URLSearchParams(window.location.search);
+    const questaoId = urlParams.get('questao');
+    
+    if (questaoId) {
+        executarComando(`echo "Praticando Questão ${questaoId}"`);
+    }
+};
