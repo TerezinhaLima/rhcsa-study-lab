@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>🐧 RHCSA Study Lab - Laboratório Completo</title>
+    <title>🐧 RHCSA V10 Exam Lab</title>
     
     <!-- Bootstrap 5 -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -259,6 +259,23 @@
         body.dark-mode .text-terminal {
             background: #1a1a1a;
         }
+        
+        .node-badge {
+            background-color: #6c757d;
+            color: white;
+            padding: 3px 8px;
+            border-radius: 12px;
+            font-size: 0.7rem;
+            font-weight: bold;
+        }
+        
+        .node1-badge {
+            background-color: #007bff;
+        }
+        
+        .node2-badge {
+            background-color: #28a745;
+        }
     </style>
 </head>
 <body>
@@ -266,7 +283,7 @@
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <div class="container">
             <a class="navbar-brand" href="#">
-                <i class="fab fa-redhat"></i> RHCSA Study Lab
+                <i class="fab fa-redhat"></i> RHCSA V10 Exam Lab
             </a>
             <div class="navbar-nav ms-auto">
                 <button id="darkModeToggle" class="btn btn-dark nav-link" style="border: none; cursor: pointer;">
@@ -281,11 +298,11 @@
         <div class="container">
             <div class="row align-items-center">
                 <div class="col-md-8">
-                    <h1 class="display-4">🐧 RHCSA Study Lab</h1>
-                    <p class="lead">Laboratório virtual completo para estudo do exame RHCSA com correção automática e terminal interativo.</p>
+                    <h1 class="display-4">🐧 RHCSA V10 Exam Lab</h1>
+                    <p class="lead">Laboratório virtual completo para estudo do exame RHCSA V10 com correção automática e terminal interativo.</p>
                     <div class="badges mt-3">
                         <span class="badge bg-danger me-2">Red Hat Certified</span>
-                        <span class="badge bg-primary me-2">22 Questões</span>
+                        <span class="badge bg-primary me-2">20 Questões</span>
                         <span class="badge bg-success me-2">Terminal Interativo</span>
                         <span class="badge bg-warning">Correção Automática</span>
                     </div>
@@ -337,14 +354,14 @@
             <div class="tab-pane fade show active" id="questoes" role="tabpanel">
                 <!-- Filtros -->
                 <div class="row mb-4">
-                    <div class="col-md-3">
+                    <div class="col-md-4">
                         <select id="filtroNode" class="form-select">
                             <option value="all">Todos os Nodes</option>
-                            <option value="1">Node 1 (1-15)</option>
-                            <option value="2">Node 2 (16-22)</option>
+                            <option value="1">Node 1 (Questões 1-13)</option>
+                            <option value="2">Node 2 (Questões 14-20)</option>
                         </select>
                     </div>
-                    <div class="col-md-3">
+                    <div class="col-md-4">
                         <select id="filtroDificuldade" class="form-select">
                             <option value="all">Todas Dificuldades</option>
                             <option value="Fácil">Fácil</option>
@@ -352,23 +369,7 @@
                             <option value="Difícil">Difícil</option>
                         </select>
                     </div>
-                    <div class="col-md-3">
-                        <select id="filtroTopico" class="form-select">
-                            <option value="all">Todos Tópicos</option>
-                            <option value="Rede">Rede</option>
-                            <option value="Pacotes">Pacotes</option>
-                            <option value="Permissões">Permissões</option>
-                            <option value="Usuários">Usuários</option>
-                            <option value="Storage">Storage</option>
-                            <option value="Serviços">Serviços</option>
-                            <option value="Agendamento">Agendamento</option>
-                            <option value="Arquivos">Arquivos</option>
-                            <option value="Scripting">Scripting</option>
-                            <option value="Segurança">Segurança</option>
-                            <option value="Contêineres">Contêineres</option>
-                        </select>
-                    </div>
-                    <div class="col-md-3">
+                    <div class="col-md-4">
                         <button id="btnResetFiltros" class="btn btn-outline-secondary w-100">
                             <i class="fas fa-redo"></i> Limpar Filtros
                         </button>
@@ -388,13 +389,13 @@
                         <div class="card">
                             <div class="card-header bg-dark text-white">
                                 <i class="fas fa-terminal"></i> Terminal Linux Interativo
-                                <span class="float-end badge bg-success">Simulador RHCSA</span>
+                                <span class="float-end badge bg-success">Simulador RHCSA V10</span>
                             </div>
                             <div class="card-body p-0">
                                 <div id="terminal-output" class="terminal-container">
                                     <div class="terminal-output">
                                         <span class="terminal-prompt">[root@rhcsa-lab ~]# </span>
-                                        <span class="terminal-success">Bem-vindo ao Terminal RHCSA Study Lab!</span>
+                                        <span class="terminal-success">Bem-vindo ao Terminal RHCSA V10 Exam Lab!</span>
                                     </div>
                                     <div class="terminal-output">
                                         <span class="terminal-prompt">[root@rhcsa-lab ~]# </span>
@@ -424,23 +425,26 @@
                             </div>
                             <div class="card-body p-2">
                                 <div class="list-group list-group-flush">
-                                    <button class="list-group-item list-group-item-action" onclick="inserirComando('whoami')">
-                                        whoami
+                                    <button class="list-group-item list-group-item-action" onclick="inserirComando('nmtui')">
+                                        nmtui
                                     </button>
-                                    <button class="list-group-item list-group-item-action" onclick="inserirComando('hostnamectl')">
-                                        hostnamectl
-                                    </button>
-                                    <button class="list-group-item list-group-item-action" onclick="inserirComando('ip addr show')">
-                                        ip addr show
-                                    </button>
-                                    <button class="list-group-item list-group-item-action" onclick="inserirComando('lsblk')">
-                                        lsblk
+                                    <button class="list-group-item list-group-item-action" onclick="inserirComando('vim /etc/yum.repos.d/exam.repo')">
+                                        vim /etc/yum.repos.d/exam.repo
                                     </button>
                                     <button class="list-group-item list-group-item-action" onclick="inserirComando('systemctl status httpd')">
                                         systemctl status httpd
                                     </button>
-                                    <button class="list-group-item list-group-item-action" onclick="inserirComando('getenforce')">
-                                        getenforce
+                                    <button class="list-group-item list-group-item-action" onclick="inserirComando('semanage port -l | grep http')">
+                                        semanage port -l | grep http
+                                    </button>
+                                    <button class="list-group-item list-group-item-action" onclick="inserirComando('firewall-cmd --list-all')">
+                                        firewall-cmd --list-all
+                                    </button>
+                                    <button class="list-group-item list-group-item-action" onclick="inserirComando('chronyc sources -v')">
+                                        chronyc sources -v
+                                    </button>
+                                    <button class="list-group-item list-group-item-action" onclick="inserirComando('lvresize -L 230M /dev/VG/VO -r')">
+                                        lvresize -L 230M /dev/VG/VO -r
                                     </button>
                                 </div>
                                 
@@ -479,7 +483,7 @@
                     <div class="col-md-3">
                         <div class="card text-center bg-primary text-white">
                             <div class="card-body">
-                                <h1 class="display-4" id="total-questoes">22</h1>
+                                <h1 class="display-4" id="total-questoes">20</h1>
                                 <p>Total de Questões</p>
                             </div>
                         </div>
@@ -495,7 +499,7 @@
                     <div class="col-md-3">
                         <div class="card text-center bg-warning text-white">
                             <div class="card-body">
-                                <h1 class="display-4" id="questoes-pendentes">22</h1>
+                                <h1 class="display-4" id="questoes-pendentes">20</h1>
                                 <p>Pendentes</p>
                             </div>
                         </div>
@@ -525,7 +529,6 @@
                                                 <th>ID</th>
                                                 <th>Questão</th>
                                                 <th>Node</th>
-                                                <th>Tópico</th>
                                                 <th>Status</th>
                                                 <th>Tentativas</th>
                                                 <th>Ação</th>
@@ -549,14 +552,14 @@
         <div class="container">
             <div class="row">
                 <div class="col-md-6">
-                    <h5><i class="fab fa-redhat"></i> RHCSA Study Lab</h5>
-                    <p>Laboratório virtual para estudo do exame RHCSA v3.0</p>
+                    <h5><i class="fab fa-redhat"></i> RHCSA V10 Exam Lab</h5>
+                    <p>Laboratório virtual para estudo do exame RHCSA V10</p>
                 </div>
                 <div class="col-md-6 text-md-end">
                     <p>
                         Desenvolvido com ❤️ para a comunidade Linux
                         <br>
-                        <small><i class="fas fa-code"></i> Versão 3.0 - Março 2024</small>
+                        <small><i class="fas fa-code"></i> Versão 10.0 - Baseado nos Dumps Oficiais</small>
                     </p>
                 </div>
             </div>
@@ -593,579 +596,698 @@
             }
         });
 
-        // ==================== DADOS DAS QUESTÕES ====================
+        // ==================== DADOS DAS QUESTÕES RHCSA V10 ====================
         const questoes = [
-            // NODE 1 - Questões 1 a 15
+            // NODE 1 - Questões 1 a 13
             {
                 id: 1,
                 node: 1,
                 topico: "Rede",
                 dificuldade: "Fácil",
-                titulo: "Configurar IP Estático",
-                descricao: `Configure um IP estático com os seguintes detalhes:
-• IP: 192.168.76.20/24
-• Gateway: 192.168.76.2
-• DNS: 192.168.76.2
-• Domain Name: Machine1.example.com
-• Certifique-se de que a rede inicie automaticamente na inicialização
-Resolução: nmtui (ou nmcli)`,
-                comando: `nmtui
+                titulo: "Configurar Rede e Hostname",
+                descricao: `Configure a rede e o hostname com os seguintes detalhes:
+• IP Address: 10.129.203.120/24
+• Netmask: 255.255.255.0
+• Gateway: 10.129.203.112
+• DNS/Name Server: 10.129.203.112
+• Domain Name: lab.example.com
+• Hostname: node1.lab.example.com
+
+Resolução: Use nmtui ou configurar manualmente.`,
+                comando: `# Usando nmtui:
+nmtui
+
 # Ou usando nmcli:
-nmcli connection modify eth0 ipv4.addresses 192.168.76.20/24
-nmcli connection modify eth0 ipv4.gateway 192.168.76.2
-nmcli connection modify eth0 ipv4.dns 192.168.76.2
+nmcli connection modify eth0 ipv4.addresses 10.129.203.120/24
+nmcli connection modify eth0 ipv4.gateway 10.129.203.112
+nmcli connection modify eth0 ipv4.dns 10.129.203.112
 nmcli connection modify eth0 ipv4.method manual
 nmcli connection modify eth0 connection.autoconnect yes
 systemctl restart NetworkManager
-hostnamectl set-hostname Machine1.example.com`,
-                solucao: `1. Use nmtui ou os comandos nmcli acima
-2. Configure IP, Gateway e DNS como especificado
-3. Configure hostname: hostnamectl set-hostname Machine1.example.com
-4. Reinicie o serviço de rede
-5. Teste: ping 192.168.76.2`,
-                verificacoes: ["nmcli connection modify", "192.168.76.20", "192.168.76.2", "hostnamectl", "Machine1.example.com", "NetworkManager"]
+hostnamectl set-hostname node1.lab.example.com`,
+                solucao: `1. Use nmtui ou comandos nmcli para configurar IP, gateway e DNS
+2. Configure hostname: hostnamectl set-hostname node1.lab.example.com
+3. Reinicie o serviço de rede
+4. Teste: ping 10.129.203.112`,
+                verificacoes: ["10.129.203.120", "10.129.203.112", "node1.lab.example.com", "NetworkManager", "hostnamectl"]
             },
             {
                 id: 2,
                 node: 1,
                 topico: "Pacotes",
                 dificuldade: "Fácil",
-                titulo: "Configurar Yum Repository",
-                descricao: `Configure o Yum Repo usando os links fornecidos:
-BaseOS: http://content.example.com/rhel9.0/x86_64/rhcsa-practice//rht
-AppStream: http://content.example.com/rhel9.0/x86_64/rhcsa-practice//rht`,
+                titulo: "Configurar Repositórios YUM",
+                descricao: `Configure os repositórios usando os seguintes caminhos:
+• BaseOS: file:///mnt/BaseOS
+• AppStream: file:///mnt/AppStream
+
+Crie o arquivo de repositório apropriado.`,
                 comando: `vim /etc/yum.repos.d/exam.repo
 
 # Adicione:
 [BaseOS]
 name=BaseOS
-baseurl=http://content.example.com/rhel9.0/x86_64/rhcsa-practice//rht
+baseurl=file:///mnt/BaseOS
 gpgcheck=0
 enabled=1
 
 [AppStream]
 name=AppStream
-baseurl=http://content.example.com/rhel9.0/x86_64/rhcsa-practice//rht
+baseurl=file:///mnt/AppStream
 gpgcheck=0
 enabled=1
 
-# Limpe e liste:
+# Limpe e verifique:
 yum clean all
 yum repolist all`,
                 solucao: `1. Crie /etc/yum.repos.d/exam.repo
 2. Adicione as configurações [BaseOS] e [AppStream]
-3. Configure baseurl, gpgcheck=0 e enabled=1
-4. Execute: yum clean all
-5. Execute: yum repolist all para verificar`,
-                verificacoes: ["/etc/yum.repos.d/", "[BaseOS]", "[AppStream]", "baseurl", "gpgcheck=0", "yum clean all", "yum repolist"]
+3. Configure baseurl=file:///mnt/BaseOS e file:///mnt/AppStream
+4. Configure gpgcheck=0 e enabled=1
+5. Execute: yum clean all
+6. Verifique: yum repolist all`,
+                verificacoes: ["/etc/yum.repos.d/exam.repo", "[BaseOS]", "[AppStream]", "file:///mnt/BaseOS", "file:///mnt/AppStream", "gpgcheck=0", "yum repolist"]
             },
             {
                 id: 3,
                 node: 1,
-                topico: "Permissões",
+                topico: "SELinux",
                 dificuldade: "Médio",
-                titulo: "Diretório /share/dev com ACL",
-                descricao: `Crie o diretório /share/dev.
-• Dê propriedade(acesso) para o devuser:devteam
-• Dê permissão de leitura, escrita e execução aos membros do devteam
-• Use o ACL para que o usuário john tenha somente acesso de leitura`,
-                comando: `mkdir -p /share/dev
-useradd devuser
-groupadd devteam
-usermod -aG devteam devuser
-chown -R devuser:devteam /share/dev
-chmod g+rwx /share/dev
-setfacl -m u:john:r-- /share/dev`,
-                solucao: `1. mkdir -p /share/dev
-2. Crie usuário e grupo se necessário
-3. chown -R devuser:devteam /share/dev
-4. chmod g+rwx /share/dev
-5. setfacl -m u:john:r-- /share/dev
-6. Verifique: getfacl /share/dev`,
-                verificacoes: ["mkdir /share/dev", "chown devuser:devteam", "chmod g+rwx", "setfacl -m u:john:r--", "getfacl"]
+                titulo: "Corrigir SELinux para Apache na porta 82",
+                descricao: `O servidor web está funcionando numa porta não padrão 82, com um problema no Node1 do conteúdo web. Depure e corrija o problema (não altere nem remova nenhum arquivo neste diretório).
+
+A) Os servidores web podem servir todos os arquivos HTML existentes localizados no diretório /var/www/html
+B) O servidor web pode servir o conteúdo na porta 82
+C) Torne o conteúdo acessível através de http://10.129.203.120:82`,
+                comando: `# Instalar e configurar Apache
+yum install httpd -y
+systemctl enable httpd
+systemctl start httpd
+
+# Configurar firewall
+firewall-cmd --permanent --add-port=82/tcp
+firewall-cmd --permanent --add-service=http
+firewall-cmd --reload
+
+# Configurar SELinux
+semanage port -a -t http_port_t -p tcp 82
+
+# Configurar Apache para porta 82
+vi /etc/httpd/conf/httpd.conf
+# Altere Listen 80 para Listen 82
+
+# Reiniciar Apache
+systemctl restart httpd
+
+# Testar
+curl http://10.129.203.120:82`,
+                solucao: `1. Instale httpd: yum install httpd -y
+2. Habilite e inicie: systemctl enable --now httpd
+3. Configure firewall: firewall-cmd --add-port=82/tcp
+4. Configure SELinux: semanage port -a -t http_port_t -p tcp 82
+5. Altere /etc/httpd/conf/httpd.conf: Listen 82
+6. Reinicie httpd: systemctl restart httpd
+7. Teste: curl http://10.129.203.120:82`,
+                verificacoes: ["yum install httpd", "firewall-cmd --add-port=82", "semanage port -a", "http_port_t", "Listen 82", "systemctl restart httpd", "curl 10.129.203.120:82"]
             },
             {
                 id: 4,
                 node: 1,
                 topico: "Usuários",
                 dificuldade: "Fácil",
-                titulo: "Criar usuário Redhat e grupo Time-TI",
-                descricao: `Crie um user chamado Redhat
-• Redefina a senha para Redhat@123
-• Crie um grupo chamado Time-TI e adicione o usuário Redhat ao grupo`,
-                comando: `useradd Redhat
-passwd Redhat  # Digite: Redhat@123
-groupadd Time-TI
-usermod -aG Time-TI Redhat`,
-                solucao: `1. useradd Redhat
-2. passwd Redhat (senha: Redhat@123)
-3. groupadd Time-TI
-4. usermod -aG Time-TI Redhat
-5. Verifique: id Redhat`,
-                verificacoes: ["useradd Redhat", "passwd Redhat", "groupadd Time-TI", "usermod -aG Time-TI Redhat", "id Redhat"]
+                titulo: "Criar Usuários e Grupos",
+                descricao: `Crie os seguintes usuários e associações de grupo:
+
+a) Um grupo chamado sysmgrs
+b) Um usuário chamado john que pertença ao sysmgrs como grupo suplementar
+c) Uma usuária chamada emma que pertença ao sysmgrs como grupo suplementar
+d) Um usuário chamado michael que não tenha acesso a shell interativo e não seja membro do sysmgrs
+e) John, emma e michael devem ter a senha compedel@314`,
+                comando: `# Criar grupo
+groupadd sysmgrs
+
+# Criar usuários
+useradd -G sysmgrs john
+useradd -G sysmgrs emma
+useradd -s /sbin/nologin michael
+
+# Definir senhas
+passwd john  # Digite: compedel@314
+passwd emma  # Digite: compedel@314
+passwd michael  # Digite: compedel@314
+
+# Verificar
+id john
+id emma
+id michael`,
+                solucao: `1. groupadd sysmgrs
+2. useradd -G sysmgrs john
+3. useradd -G sysmgrs emma
+4. useradd -s /sbin/nologin michael
+5. passwd para cada usuário (senha: compedel@314)
+6. Verifique: id john, id emma, id michael`,
+                verificacoes: ["groupadd sysmgrs", "useradd john", "useradd emma", "useradd michael", "-G sysmgrs", "-s /sbin/nologin", "passwd", "compedel@314"]
             },
             {
                 id: 5,
                 node: 1,
-                topico: "Rede",
+                topico: "Storage",
                 dificuldade: "Médio",
-                titulo: "SSH sem senha para Natasha",
-                descricao: `Configure o SSH no node 2 para que a usuária Natasha faça login sem precisar de senha.
-• Use ssh-keygen e ssh-copy-id
-• Teste a conexão para garantir a funcionalidade`,
-                comando: `# No Node 1:
-ssh-keygen -t rsa -N '' -f ~/.ssh/id_rsa
-ssh-copy-id natasha@192.168.76.30  # Substitua pelo IP do Node 2
+                titulo: "Configurar Autofs com NFS",
+                descricao: `Configure o autofs para montar automaticamente os diretórios home do usuário remoteuser18:
 
-# Teste:
-ssh natasha@192.168.76.30 'whoami'`,
-                solucao: `1. Gere chave SSH: ssh-keygen -t rsa
-2. Copie a chave: ssh-copy-id natasha@IP_DO_NODE2
-3. Teste login sem senha
-4. Deve conectar automaticamente`,
-                verificacoes: ["ssh-keygen -t rsa", "ssh-copy-id", "natasha@", ".ssh/id_rsa", "ssh "]
+a) serverb.lab.example.com (10.129.203.118) exporta /rhome para seu sistema via NFS
+b) O diretório home do remoteuser18 é: serverb.lab.example.com:/rhome/remoteuser18
+c) Deve ser montado automaticamente em: /rhome/remoteuser18
+d) O diretório home deve ser gravável pelos usuários
+e) A senha do Remoteuser18 é compedel`,
+                comando: `# Instalar autofs
+yum install autofs nfs-utils -y
+
+# Configurar master map
+echo "/- /etc/auto.rhome" >> /etc/auto.master
+
+# Criar arquivo de mapeamento
+vi /etc/auto.rhome
+# Adicione:
+/rhome/remoteuser18 -rw,soft,intr 10.129.203.118:/rhome/remoteuser18
+
+# Iniciar autofs
+systemctl enable autofs
+systemctl start autofs
+
+# Testar
+ls -la /rhome/remoteuser18`,
+                solucao: `1. Instale autofs e nfs-utils
+2. Adicione ao /etc/auto.master: /- /etc/auto.rhome
+3. Crie /etc/auto.rhome com: /rhome/remoteuser18 -rw 10.129.203.118:/rhome/remoteuser18
+4. systemctl enable --now autofs
+5. Teste: ls /rhome/remoteuser18`,
+                verificacoes: ["yum install autofs", "/etc/auto.master", "/etc/auto.rhome", "10.129.203.118:/rhome", "systemctl enable autofs", "ls /rhome/remoteuser18"]
             },
             {
                 id: 6,
                 node: 1,
-                topico: "Serviços",
-                dificuldade: "Médio",
-                titulo: "Servidor Web na porta 82",
-                descricao: `Um servidor web em execução na porta 82 não padrão está com problemas para fornecer conteúdo.
-• O servidor web pode servir arquivos HTML de /var/www/html
-• O serviço deve iniciar automaticamente na hora do boot.`,
-                comando: `yum install httpd -y
-firewall-cmd --permanent --add-port=82/tcp
-firewall-cmd --permanent --add-service=http
-firewall-cmd --reload
-semanage port -a -t http_port_t -p tcp 82
-vi /etc/httpd/conf/httpd.conf  # Altere Listen 80 para Listen 82
-systemctl restart httpd
-systemctl enable httpd`,
-                solucao: `1. Instale httpd
-2. Configure firewall para porta 82
-3. Configure SELinux para porta 82
-4. Altere /etc/httpd/conf/httpd.conf (Listen 82)
-5. Reinicie e habilite httpd
-6. Teste: curl http://localhost:82`,
-                verificacoes: ["yum install httpd", "firewall-cmd --add-port=82/tcp", "semanage port -a", "Listen 82", "systemctl restart httpd", "systemctl enable httpd"]
+                topico: "Agendamento",
+                dificuldade: "Fácil",
+                titulo: "Configurar Cronjob para John",
+                descricao: `O usuário john deve configurar o cronjob para ser executado diariamente às 12:30, horário local, e executar /bin/echo "hello world".`,
+                comando: `# Instalar cronie
+yum install cronie* -y
+systemctl enable cronie
+systemctl start cronie
+
+# Configurar cron para john
+crontab -e -u john
+# Adicione:
+30 12 * * * /bin/echo "hello world"
+
+# Verificar
+crontab -l -u john`,
+                solucao: `1. Instale cronie: yum install cronie* -y
+2. systemctl enable --now cronie
+3. crontab -e -u john
+4. Adicione: 30 12 * * * /bin/echo "hello world"
+5. Verifique: crontab -l -u john`,
+                verificacoes: ["yum install cronie", "systemctl enable cronie", "crontab -e -u john", "30 12 * * *", "/bin/echo", "hello world"]
             },
             {
                 id: 7,
                 node: 1,
-                topico: "Storage",
-                dificuldade: "Difícil",
-                titulo: "Volume Lógico LVM de 500MB",
-                descricao: `Crie um volume lógico lvdata de tamanho 500MB e um VG vgdata utilizando /dev/sdb
-• Formate com xfs, monte permanentemente em /mnt/data`,
-                comando: `fdisk /dev/sdb  # Crie partição (n, p, 1, Enter, +500M, t, 31, w)
-partprobe /dev/sdb
-pvcreate /dev/sdb1
-vgcreate vgdata /dev/sdb1
-lvcreate -L 500M -n lvdata vgdata
-mkfs.xfs /dev/vgdata/lvdata
-mkdir /mnt/data
-echo '/dev/vgdata/lvdata /mnt/data xfs defaults 0 0' >> /etc/fstab
-mount -a
-systemctl daemon-reload`,
-                solucao: `1. fdisk /dev/sdb (criar partição)
-2. pvcreate /dev/sdb1
-3. vgcreate vgdata /dev/sdb1
-4. lvcreate -L 500M -n lvdata vgdata
-5. mkfs.xfs /dev/vgdata/lvdata
-6. mkdir /mnt/data
-7. Adicione ao /etc/fstab
-8. mount -a
-9. Verifique: lsblk, df -h`,
-                verificacoes: ["fdisk /dev/sdb", "pvcreate", "vgcreate vgdata", "lvcreate -L 500M", "mkfs.xfs", "/etc/fstab", "mount -a"]
+                topico: "Serviços",
+                dificuldade: "Médio",
+                titulo: "Configurar Cliente NTP",
+                descricao: `Configure seu sistema para que ele seja um cliente NTP de classroom.example.com`,
+                comando: `# Instalar chrony
+yum install chrony -y
+systemctl enable chronyd
+systemctl start chronyd
+
+# Configurar servidor NTP
+vim /etc/chrony.conf
+# Adicione ou modifique:
+server classroom.example.com iburst
+
+# Reiniciar serviço
+systemctl restart chronyd
+
+# Verificar sincronização
+chronyc sources
+chronyc sources -v`,
+                solucao: `1. Instale chrony: yum install chrony -y
+2. Configure /etc/chrony.conf: server classroom.example.com iburst
+3. systemctl enable --now chronyd
+4. systemctl restart chronyd
+5. Verifique: chronyc sources -v`,
+                verificacoes: ["yum install chrony", "/etc/chrony.conf", "server classroom.example.com", "iburst", "systemctl enable chronyd", "chronyc sources"]
             },
             {
                 id: 8,
                 node: 1,
-                topico: "Agendamento",
-                dificuldade: "Fácil",
-                titulo: "Cronjob para devuser",
-                descricao: `Crie um cronjob para o usuário devuser que execute o comando uptime a cada 5 minutos e salve a saída em /home/devuser/uptime.log`,
-                comando: `yum install cronie -y
-crontab -e -u devuser
-# Adicione:
-*/5 * * * * uptime >> /home/devuser/uptime.log
+                topico: "Arquivos",
+                dificuldade: "Médio",
+                titulo: "Localizar Arquivos de Emma",
+                descricao: `Localize todos os arquivos e diretórios pertencentes a emma e faça uma cópia deles no caminho fornecido /root/find.user`,
+                comando: `# Criar diretório de destino
+mkdir -p /root/find.user
 
-# Verifique:
-crontab -l -u devuser`,
-                solucao: `1. Instale cronie se necessário
-2. crontab -e -u devuser
-3. Adicione: */5 * * * * uptime >> /home/devuser/uptime.log
-4. Salve e saia
-5. Verifique: crontab -l -u devuser`,
-                verificacoes: ["crontab -e -u devuser", "*/5 * * * *", "uptime", "/home/devuser/uptime.log", "crontab -l"]
+# Localizar e copiar arquivos
+find / -user emma -exec cp -rpvf {} /root/find.user/ \\; 2>/dev/null
+
+# Verificar
+ls -la /root/find.user/ | head`,
+                solucao: `1. mkdir -p /root/find.user
+2. find / -user emma -exec cp -rpvf {} /root/find.user/ \\; 2>/dev/null
+3. Use -r para diretórios
+4. Ignore erros com 2>/dev/null
+5. Verifique os arquivos copiados`,
+                verificacoes: ["find / -user emma", "-exec cp -rpvf", "/root/find.user", "mkdir /root/find.user", "2>/dev/null"]
             },
             {
                 id: 9,
                 node: 1,
                 topico: "Arquivos",
                 dificuldade: "Fácil",
-                titulo: "Backup do diretório /etc",
-                descricao: `Compacte o diretório /etc usando tar com gzip e salve-o como /root/etc_backup.tar.gz`,
-                comando: `tar --gzip -cvf /root/etc_backup.tar.gz /etc
+                titulo: "Encontrar String em Arquivo",
+                descricao: `Encontre todas as ocorrências da string "ich" em /usr/share/dict/words e salve o resultado em /root/lines`,
+                comando: `# Buscar string e salvar resultado
+grep "ich" /usr/share/dict/words > /root/lines
 
-# Verifique:
-ls -lh /root/etc_backup.tar.gz`,
-                solucao: `1. Execute: tar --gzip -cvf /root/etc_backup.tar.gz /etc
-2. Verifique o arquivo criado
-3. Tamanho aproximado: 20-30MB`,
-                verificacoes: ["tar --gzip -cvf", "/root/etc_backup.tar.gz", "/etc", "ls -lh"]
+# Verificar
+cat /root/lines | head
+wc -l /root/lines`,
+                solucao: `1. Use grep para buscar "ich" em /usr/share/dict/words
+2. Redirecione a saída para /root/lines: > /root/lines
+3. Verifique: cat /root/lines | head
+4. Conte as linhas: wc -l /root/lines`,
+                verificacoes: ["grep", "ich", "/usr/share/dict/words", "/root/lines", ">"]
             },
             {
                 id: 10,
                 node: 1,
                 topico: "Usuários",
                 dificuldade: "Fácil",
-                titulo: "Usuário Alex no grupo Time-TI",
-                descricao: `Crie o usuário alex e torne o usuário alex um grupo secundário do grupo Time-TI`,
-                comando: `useradd alex
-usermod -aG Time-TI alex
+                titulo: "Criar Usuário Alex com UID Específico",
+                descricao: `Crie um usuário chamado alex com o ID 2345 e a senha Compedel@124`,
+                comando: `# Criar usuário com UID específico
+useradd -u 2345 alex
 
-# Verifique:
-id alex`,
-                solucao: `1. useradd alex
-2. usermod -aG Time-TI alex
-3. Verifique: id alex
-4. Deve mostrar: groups=Time-TI`,
-                verificacoes: ["useradd alex", "usermod -aG Time-TI alex", "id alex", "Time-TI"]
+# Definir senha
+passwd alex
+# Digite: Compedel@124
+# Confirme: Compedel@124
+
+# Verificar
+id alex
+getent passwd alex | grep 2345`,
+                solucao: `1. useradd -u 2345 alex
+2. passwd alex (senha: Compedel@124)
+3. Verifique: id alex e getent passwd alex`,
+                verificacoes: ["useradd -u 2345", "alex", "passwd alex", "Compedel@124", "id alex"]
             },
             {
                 id: 11,
                 node: 1,
-                topico: "Usuários",
+                topico: "Arquivos",
                 dificuldade: "Fácil",
-                titulo: "Usuário John com UID 2245",
-                descricao: `Crie o usuário John com uid 2245 e redefina a senha para redhat@123`,
-                comando: `useradd -u 2245 john
-passwd john  # Digite: redhat@123
+                titulo: "Criar Arquivo Tar com Backup",
+                descricao: `Faça backup do /usr/local como /root/backup.tar.gz usando o gzip`,
+                comando: `# Criar backup com gzip
+tar --gzip -cvf /root/backup.tar.gz /usr/local
 
-# Verifique:
-getent passwd john | grep 2245`,
-                solucao: `1. useradd -u 2245 john
-2. passwd john (senha: redhat@123)
-3. Verifique: getent passwd john
-4. Deve mostrar UID 2245`,
-                verificacoes: ["useradd -u 2245", "john", "passwd john", "getent passwd john"]
+# Verificar
+ls -lh /root/backup.tar.gz
+tar -tvf /root/backup.tar.gz | head`,
+                solucao: `1. Execute: tar --gzip -cvf /root/backup.tar.gz /usr/local
+2. Verifique o arquivo criado: ls -lh
+3. Liste o conteúdo: tar -tvf /root/backup.tar.gz`,
+                verificacoes: ["tar --gzip -cvf", "/root/backup.tar.gz", "/usr/local", "ls -lh"]
             },
             {
                 id: 12,
                 node: 1,
-                topico: "Arquivos",
+                topico: "Permissões",
                 dificuldade: "Médio",
-                titulo: "Localizar arquivos do usuário tom",
-                descricao: `Localize todos os arquivos pertencentes ao usuário tom e copie-os para /root/tomfiles`,
-                comando: `mkdir -p /root/tomfiles
-find / -user tom -type f -exec cp -pvf {} /root/tomfiles/ \\; 2>/dev/null
+                titulo: "Configurar Permissões Padrão com Umask",
+                descricao: `Defina as permissões necessárias para o usuário john:
 
-# Verifique:
-ls -l /root/tomfiles/ | head -5`,
-                solucao: `1. mkdir /root/tomfiles
-2. find / -user tom -type f -exec cp -pvf {} /root/tomfiles/ \\;
-3. Ignore erros com 2>/dev/null
-4. Verifique os arquivos copiados`,
-                verificacoes: ["find / -user tom", "-type f", "-exec cp", "/root/tomfiles", "mkdir /root/tomfiles"]
+A. Todos os novos arquivos criados para o usuário john como somente leitura (r--------) como permissão padrão
+B. Todos os diretórios criados para o usuário john como (dr-x--------) como permissão padrão`,
+                comando: `# Mudar para usuário john
+su john
+
+# Configurar umask para 277
+umask 277
+
+# Testar criação de arquivo e diretório
+touch test_file
+mkdir test_dir
+
+# Verificar permissões
+ls -l test_file
+ls -ld test_dir
+
+# Para tornar permanente, adicione ao ~/.bashrc
+echo "umask 277" >> ~/.bashrc`,
+                solucao: `1. su john
+2. umask 277
+3. Crie arquivo: touch test_file (deve ficar r--------)
+4. Crie diretório: mkdir test_dir (deve ficar dr-x------)
+5. Adicione ao .bashrc para persistência`,
+                verificacoes: ["su john", "umask 277", "touch test_file", "mkdir test_dir", "ls -l", "dr-x"]
             },
             {
                 id: 13,
                 node: 1,
-                topico: "Arquivos",
-                dificuldade: "Médio",
-                titulo: "Localizar arquivos do usuário jerry",
-                descricao: `Localize todos os arquivos e diretórios pertencentes ao usuário jerry e copie-os para /root/jerryfiles`,
-                comando: `mkdir -p /root/jerryfiles
-find / -user jerry -exec cp -rpvf {} /root/jerryfiles/ \\; 2>/dev/null
+                topico: "Systemd",
+                dificuldade: "Difícil",
+                titulo: "Criar Serviço e Timer Systemd",
+                descricao: `Configure tarefas recorrentes:
 
-# Verifique:
-ls -la /root/jerryfiles/ | head -5`,
-                solucao: `1. mkdir /root/jerryfiles
-2. find / -user jerry -exec cp -rpvf {} /root/jerryfiles/ \\;
-3. Use -r para diretórios
-4. Ignore erros com 2>/dev/null`,
-                verificacoes: ["find / -user jerry", "-exec cp -rpvf", "/root/jerryfiles", "mkdir /root/jerryfiles"]
+a) Crie um script /usr/local/bin/log_capture que liste todos os arquivos em /tmp e salve a saída em /root/log_output/system_logs.trc
+b) Crie uma unidade de serviço systemd log_capture.service que execute o script
+c) Crie uma unidade de temporizador systemd log_capture.timer que acione o serviço a cada 1 minuto
+d) Habilite e inicie o temporizador
+e) Verifique se está funcionando`,
+                comando: `# Instalar pacote necessário
+yum install mod_lookup_identity* -y
+
+# Criar script
+vi /usr/local/bin/log_capture.sh
+#!/bin/bash
+mkdir -p /root/log_output
+find /tmp > /root/log_output/system_logs.trc
+
+chmod +x /usr/local/bin/log_capture.sh
+
+# Criar serviço
+vi /etc/systemd/system/log_capture.service
+[Unit]
+Description=Capture list of files in /tmp
+
+[Service]
+Type=oneshot
+ExecStart=/usr/local/bin/log_capture.sh
+
+# Criar timer
+vi /etc/systemd/system/log_capture.timer
+[Unit]
+Description=Run log_capture service every 1 minute
+
+[Timer]
+OnBootSec=1min
+OnUnitActiveSec=1min
+Unit=log_capture.service
+
+[Install]
+WantedBy=timers.target
+
+# Ativar e iniciar
+systemctl daemon-reload
+systemctl daemon-reexec
+systemctl enable --now log_capture.timer
+
+# Verificar
+systemctl status log_capture.timer
+cat /root/log_output/system_logs.trc`,
+                solucao: `1. Crie o script em /usr/local/bin/log_capture.sh
+2. chmod +x no script
+3. Crie o arquivo de serviço em /etc/systemd/system/
+4. Crie o arquivo de timer em /etc/systemd/system/
+5. systemctl daemon-reload
+6. systemctl enable --now log_capture.timer
+7. Verifique: systemctl status log_capture.timer`,
+                verificacoes: ["/usr/local/bin/log_capture.sh", "#!/bin/bash", "find /tmp", "/etc/systemd/system/log_capture.service", "Type=oneshot", "/etc/systemd/system/log_capture.timer", "OnUnitActiveSec=1min", "systemctl enable", "systemctl start"]
             },
+            // NODE 2 - Questões 14 a 20
             {
                 id: 14,
-                node: 1,
-                topico: "Permissões",
-                dificuldade: "Médio",
-                titulo: "Diretório /shared/projects com sticky bit",
-                descricao: `Crie o diretório /shared/projects no node1.
-• A propriedade do arquivo deve passar para o Alex.
-• Garanta que nenhum usuário possa excluir arquivos do proprietário dentro de /shared/projects exceto o proprietário do arquivo.`,
-                comando: `mkdir -p /shared/projects
-chown -R alex /shared/projects
-chmod a+rwx,+t /shared/projects
-
-# Verifique:
-ls -ld /shared/projects`,
-                solucao: `1. mkdir -p /shared/projects
-2. chown -R alex /shared/projects
-3. chmod a+rwx,+t /shared/projects (sticky bit)
-4. Verifique: ls -ld /shared/projects
-5. Deve mostrar: drwxrwxrwt`,
-                verificacoes: ["mkdir /shared/projects", "chown alex", "chmod a+rwx,+t", "ls -ld", "drwxrwxrwt"]
-            },
-            {
-                id: 15,
-                node: 1,
-                topico: "Scripting",
-                dificuldade: "Difícil",
-                titulo: "Script para localizar arquivos por tamanho",
-                descricao: `Crie um arquivo de script com o nome "script.sh" dentro do diretório "/bin" e localize todos os arquivos do diretório "usr/local" que tenham mais de 3k e menos de 5k e copie-os para "/root/d1". Defina também a permissão sgid para o diretório.`,
-                comando: `vim /bin/script.sh
-
-# Conteúdo do script:
-#!/bin/bash
-mkdir -p /root/d1
-find /usr/local -size +3k -size -5k -exec cp -rpvf {} /root/d1 \\;
-chmod g+s /root/d1
-
-# Permissões:
-chmod a+x /bin/script.sh
-
-# Execute:
-/bin/script.sh`,
-                solucao: `1. Crie /bin/script.sh
-2. Adicione o script com find e cp
-3. chmod a+x /bin/script.sh
-4. Execute o script
-5. chmod g+s /root/d1 (SGID)
-6. Verifique: ls -ld /root/d1`,
-                verificacoes: ["/bin/script.sh", "#!/bin/bash", "find /usr/local -size +3k -size -5k", "chmod g+s", "/root/d1", "chmod a+x"]
-            },
-            // NODE 2 - Questões 16 a 22
-            {
-                id: 16,
                 node: 2,
                 topico: "Segurança",
                 dificuldade: "Difícil",
-                titulo: "Recuperar senha root",
-                descricao: `Recuperar a senha root, a senha deve ser redhat@312
-(Às vezes, não é especificada nenhuma senha; nesse caso, você pode definir qualquer senha.)`,
-                comando: `# Durante o boot, na tela do GRUB:
-1. Pressione 'e' para editar
-2. Localize linha "linux" e adicione: rd.break
-3. Ctrl+X para iniciar
+                titulo: "Recuperar Senha Root (Node 2)",
+                descricao: `Defina a senha root para o node2. A senha deve ser compedel@777.
 
-# No prompt de recuperação:
-mount -o remount,rw /sysroot
-chroot /sysroot
-passwd root  # Digite: redhat@312
+Instruções:
+- Reiniciar a VM
+- Na tela de GRUB, apertar a tecla "e"
+- Ir na linha onde a primeira palavra é "Linux"
+- Ir até o final da linha
+- Escrever: rw init=/bin/bash
+- Apertar: Ctrl + X`,
+                comando: `# No prompt de recuperação:
+passwd
+# Digite: compedel@777
+# Confirme: compedel@777
+
 touch /.autorelabel
-exit
-exit
-reboot`,
-                solucao: `1. Boot com rd.break no GRUB
-2. mount -o remount,rw /sysroot
-3. chroot /sysroot
-4. passwd root (senha: redhat@312)
-5. touch /.autorelabel
-6. exit, exit, reboot
-7. Login com nova senha`,
-                verificacoes: ["rd.break", "mount -o remount,rw /sysroot", "chroot /sysroot", "passwd root", "touch /.autorelabel"]
+
+# Reiniciar
+exec /sbin/init`,
+                solucao: `1. Boot com rw init=/bin/bash no GRUB
+2. No prompt: passwd (digite compedel@777)
+3. touch /.autorelabel
+4. exec /sbin/init para reiniciar
+5. Login com nova senha`,
+                verificacoes: ["rw init=/bin/bash", "passwd", "compedel@777", "touch /.autorelabel", "exec /sbin/init"]
             },
             {
-                id: 17,
+                id: 15,
                 node: 2,
-                topico: "Contêineres",
-                dificuldade: "Médio",
-                titulo: "Criar imagem de contêiner",
-                descricao: `Crie uma imagem de contêiner usando o link fornecido
-http://utility.example.com/container/Containerfile
-• Dê o nome a ele de "image32"
-• Faça login em 'registry.lab.example.com' com "admin" e "Admin@123".
-• O contêiner deve ser criado com o usuário "Sophia"`,
-                comando: `yum install podman container-tools -y
-systemctl enable podman
-systemctl start podman
-ssh sophia@IP_DO_SERVIDOR
-podman login registry.lab.example.com  # Usuário: admin, Senha: Admin@123
-wget http://utility.example.com/container/Containerfile
-podman build -t image32 -f Containerfile
+                topico: "Pacotes",
+                dificuldade: "Fácil",
+                titulo: "Configurar Repositórios (Node 2)",
+                descricao: `Configure os repositórios usando os seguintes caminhos:
+• BaseOS: file:///mnt/BaseOS
+• AppStream: file:///mnt/AppStream`,
+                comando: `vim /etc/yum.repos.d/exam.repo
 
-# Verifique:
-podman images`,
-                solucao: `1. Instale podman
-2. Habilite e inicie podman
-3. SSH para usuário sophia
-4. Login no registry
-5. Baixe Containerfile
-6. Build da imagem: podman build -t image32
-7. Verifique: podman images`,
-                verificacoes: ["yum install podman", "podman login", "wget", "podman build -t image32", "Containerfile", "podman images"]
+# Adicione:
+[BaseOS]
+name=BaseOS
+baseurl=file:///mnt/BaseOS
+gpgcheck=0
+enabled=1
+
+[AppStream]
+name=AppStream
+baseurl=file:///mnt/AppStream
+gpgcheck=0
+enabled=1
+
+# Limpe e verifique:
+yum clean all
+yum repolist all`,
+                solucao: `1. Crie /etc/yum.repos.d/exam.repo
+2. Adicione as configurações [BaseOS] e [AppStream]
+3. Execute: yum clean all
+4. Verifique: yum repolist all`,
+                verificacoes: ["/etc/yum.repos.d/exam.repo", "[BaseOS]", "[AppStream]", "file:///mnt/BaseOS", "file:///mnt/AppStream", "gpgcheck=0", "yum repolist"]
             },
             {
-                id: 18,
-                node: 2,
-                topico: "Contêineres",
-                dificuldade: "Difícil",
-                titulo: "Contêiner sem raiz (rootless)",
-                descricao: `Crie um contêiner sem raiz usando as seguintes condições:
-• Contêiner criado com usuário regular
-• Serviço habilitado para iniciar automaticamente
-• Nome: container24 usando imagem anterior
-• Mapeie '/opt/files' para '/opt/incoming'
-• Mapeie '/opt/processed' para '/opt/outgoing'
-• Crie serviço systemd`,
-                comando: `# Como root:
-mkdir -p /opt/files /opt/processed
-chown -R sophia:sophia /opt/files /opt/processed
-
-# Como usuário sophia:
-ssh sophia@IP_DO_SERVIDOR
-podman run -d --name container24 -v /opt/files:/opt/incoming:Z -v /opt/processed:/opt/outgoing:Z image32
-loginctl enable-linger
-mkdir -p /home/sophia/.config/systemd/user
-cd /home/sophia/.config/systemd/user
-podman generate systemd --name container24 --files --new
-systemctl --user daemon-reload
-systemctl --user enable container-container24.service
-systemctl --user start container-container24.service
-
-# Verifique:
-systemctl --user status container-container24.service`,
-                solucao: `1. Crie diretórios e ajuste permissões
-2. SSH como sophia
-3. Execute contêiner com volumes mapeados
-4. Habilite linger
-5. Gere unit file do systemd
-6. Habilite e inicie serviço
-7. Verifique status`,
-                verificacoes: ["mkdir /opt/files", "chown sophia", "podman run -d --name container24", "-v /opt/files:/opt/incoming", "podman generate systemd", "systemctl --user enable", "loginctl enable-linger"]
-            },
-            {
-                id: 19,
+                id: 16,
                 node: 2,
                 topico: "Storage",
                 dificuldade: "Médio",
-                titulo: "Criar partição SWAP de 400MiB",
-                descricao: `Crie uma partição SWAP de 400MiB
-• Não modifique a partição swap atual
-• Deve permanecer após a reinicialização.`,
-                comando: `fdisk /dev/sdc
+                titulo: "Criar Partição Swap de 756 MiB",
+                descricao: `Adicione uma partição swap adicional de 756 MiB ao disco /dev/sdb no seu sistema. A partição swap deve ser montada automaticamente quando o sistema for inicializado.`,
+                comando: `# Particionar disco
+fdisk /dev/sdb
 # Comandos no fdisk:
 g  # Criar tabela GPT
 n  # Nova partição
 1  # Número da partição
 Enter  # Primeiro setor
-+400M  # Tamanho
-t  # Tipo
++756M  # Tamanho
+t  # Alterar tipo
 19  # Linux swap
 w  # Salvar
 
-partprobe /dev/sdc
-mkswap /dev/sdc1
-echo '/dev/sdc1 swap swap defaults 0 0' >> /etc/fstab
+# Atualizar tabela de partições
+partprobe /dev/sdb
+
+# Formatar como swap
+mkswap /dev/sdb1
+
+# Adicionar ao fstab
+echo '/dev/sdb1 swap swap defaults 0 0' >> /etc/fstab
+
+# Ativar swap
 swapon -a
 
-# Verifique:
+# Verificar
 swapon --show
-lsblk`,
-                solucao: `1. fdisk /dev/sdc (criar partição swap)
-2. partprobe para atualizar kernel
-3. mkswap /dev/sdc1
+free -h`,
+                solucao: `1. fdisk /dev/sdb (criar partição de 756M tipo swap)
+2. partprobe /dev/sdb
+3. mkswap /dev/sdb1
 4. Adicione ao /etc/fstab
 5. swapon -a
 6. Verifique: swapon --show, free -h`,
-                verificacoes: ["fdisk /dev/sdc", "mkswap /dev/sdc1", "/etc/fstab", "swapon -a", "swapon --show", "lsblk"]
+                verificacoes: ["fdisk /dev/sdb", "+756M", "mkswap /dev/sdb1", "/etc/fstab", "swap", "swapon -a"]
             },
             {
-                id: 20,
+                id: 17,
                 node: 2,
                 topico: "Storage",
                 dificuldade: "Difícil",
-                titulo: "Volume Lógico com extensões específicas",
-                descricao: `Crie um volume lógico chamado LV1 no Volume group chamado VG1 com extensão de 16M e extensão lógica de 30.
-• Formate com ext4
-• Monte em /database`,
-                comando: `# Calcular tamanho: 30 * 16M = 480M
-fdisk /dev/sde
-# Comandos:
+                titulo: "Redimensionar Volume Lógico",
+                descricao: `Redimensione o volume lógico VO e seu sistema de arquivos para 230 MiB. Certifique-se de que a partição tenha exatamente o tamanho solicitado (217-243 MiB é aceitável).`,
+                comando: `# Verificar volume atual
+lvs
+df -h
+
+# Redimensionar volume lógico e sistema de arquivos
+lvresize -L 230M /dev/VG/VO -r
+
+# Verificar
+lvs
+df -h`,
+                solucao: `1. Verifique o volume atual: lvs
+2. Redimensione: lvresize -L 230M /dev/VG/VO -r
+3. A opção -r redimensiona o sistema de arquivos também
+4. Verifique: lvs e df -h`,
+                verificacoes: ["lvresize", "-L 230M", "/dev/VG/VO", "-r", "lvs", "df -h"]
+            },
+            {
+                id: 18,
+                node: 2,
+                topico: "Flatpak",
+                dificuldade: "Médio",
+                titulo: "Configurar Flatpak para usuário student",
+                descricao: `Configure o Flatpak para que o usuário "student" possa instalar o "codium" a partir do repositório Flathub.
+
+Requisitos:
+- Repositório flatpak: https://flathub.org/repo/flathub.flatpakrepo
+- Nome do repositório: "flatdb"
+- Configurado apenas para o usuário "student"
+- Instalar aplicativo "codium" para o usuário "student"`,
+                comando: `# Verificar se usuário student existe
+id student
+# Se não existir: useradd student
+
+# Mudar para usuário student
+su student
+
+# Adicionar repositório flatpak
+flatpak remote-add --user --if-not-exists flatdb https://flathub.org/repo/flathub.flatpakrepo
+
+# Instalar codium
+flatpak install --user flatdb codium
+
+# Verificar instalação
+flatpak list | grep codium
+
+# Executar
+flatpak run codium`,
+                solucao: `1. Certifique-se que usuário student existe
+2. su student
+3. flatpak remote-add --user --if-not-exists flatdb https://flathub.org/repo/flathub.flatpakrepo
+4. flatpak install --user flatdb codium
+5. Verifique: flatpak list | grep codium`,
+                verificacoes: ["su student", "flatpak remote-add", "--user", "flatdb", "flathub.flatpakrepo", "flatpak install", "codium"]
+            },
+            {
+                id: 19,
+                node: 2,
+                topico: "Storage",
+                dificuldade: "Difícil",
+                titulo: "Criar Volume Lógico com Extensões Específicas",
+                descricao: `Crie um novo volume lógico de acordo com os seguintes requisitos:
+
+a) Volume lógico denominado 'qa', pertencente ao VG 'qagroup', com 60 extensões
+b) Tamanho de extensões de 16 MiB no VG 'qagroup'
+c) Volume físico no disco /dev/sdc
+d) Formatar com sistema de arquivos ext4
+e) Montar automaticamente em /mnt/qa na inicialização`,
+                comando: `# Calcular tamanho: 16 * 60 = 960 MiB
+bc
+16*60
+
+# Particionar disco
+fdisk /dev/sdc
 g  # GPT
 n  # Nova partição
 1  # Número
 Enter  # Início
-+600M  # Tamanho (um pouco maior)
++1000M  # Tamanho (um pouco maior)
 t  # Tipo
 31  # Linux LVM
 w  # Salvar
 
-partprobe /dev/sde
-pvcreate /dev/sde1
-vgcreate VG1 -s 16M /dev/sde1
-lvcreate -l 30 -n LV1 VG1
-mkfs.ext4 /dev/VG1/LV1
-mkdir /database
-echo '/dev/VG1/LV1 /database ext4 defaults 0 0' >> /etc/fstab
-mount -a
+# Atualizar tabela
+partprobe /dev/sdc
 
-# Verifique:
-lvs
-df -h /database`,
-                solucao: `1. fdisk /dev/sde (criar partição LVM)
-2. pvcreate /dev/sde1
-3. vgcreate VG1 -s 16M /dev/sde1
-4. lvcreate -l 30 -n LV1 VG1 (480MB)
-5. mkfs.ext4 /dev/VG1/LV1
-6. Adicione ao /etc/fstab
-7. mount -a
-8. Verifique: lvs, df -h`,
-                verificacoes: ["fdisk /dev/sde", "pvcreate", "vgcreate VG1 -s 16M", "lvcreate -l 30", "mkfs.ext4", "/etc/fstab", "mount -a"]
+# Criar PV, VG e LV
+pvcreate /dev/sdc1
+vgcreate -s 16M qagroup /dev/sdc1
+lvcreate -l 60 -n qa qagroup
+
+# Formatar
+mkfs.ext4 /dev/qagroup/qa
+
+# Criar ponto de montagem
+mkdir -p /mnt/qa
+
+# Adicionar ao fstab
+echo '/dev/qagroup/qa /mnt/qa ext4 defaults 0 0' >> /etc/fstab
+
+# Montar
+mount -a
+systemctl daemon-reload
+
+# Verificar
+lsblk
+df -h /mnt/qa`,
+                solucao: `1. Calcule tamanho: 16MiB * 60 = 960MiB
+2. fdisk /dev/sdc (criar partição LVM de ~1000MiB)
+3. pvcreate /dev/sdc1
+4. vgcreate -s 16M qagroup /dev/sdc1
+5. lvcreate -l 60 -n qa qagroup
+6. mkfs.ext4 /dev/qagroup/qa
+7. mkdir /mnt/qa
+8. Adicione ao /etc/fstab
+9. mount -a
+10. Verifique: lsblk, df -h`,
+                verificacoes: ["fdisk /dev/sdc", "pvcreate /dev/sdc1", "vgcreate -s 16M qagroup", "lvcreate -l 60", "mkfs.ext4", "/etc/fstab", "/mnt/qa", "mount -a"]
             },
             {
-                id: 21,
+                id: 20,
                 node: 2,
                 topico: "Performance",
                 dificuldade: "Fácil",
-                titulo: "Configurar tuned",
-                descricao: `Configure o ajuste do sistema usando tuned`,
-                comando: `yum install tuned -y
+                titulo: "Configurar Tuned",
+                descricao: `Configure o ajuste do sistema. Escolha o perfil ajustado recomendado para o seu sistema e defina-o como padrão.`,
+                comando: `# Instalar tuned
+yum install tuned* -y
+
+# Habilitar e iniciar serviço
 systemctl enable tuned
 systemctl start tuned
+
+# Ver perfil recomendado
 tuned-adm recommend
+
+# Aplicar perfil recomendado
 tuned-adm profile virtual-guest
 
-# Verifique:
-tuned-adm active`,
-                solucao: `1. Instale tuned
-2. Habilite e inicie serviço
-3. Veja perfil recomendado
-4. Configure perfil virtual-guest
-5. Verifique: tuned-adm active`,
-                verificacoes: ["yum install tuned", "systemctl enable tuned", "tuned-adm recommend", "tuned-adm profile virtual-guest", "tuned-adm active"]
-            },
-            {
-                id: 22,
-                node: 2,
-                topico: "Permissões",
-                dificuldade: "Médio",
-                titulo: "Diretório colaborativo com SGID",
-                descricao: `Configurar diretório colaborativo em /share para grupo 'devops' com permissões SGID.`,
-                comando: `groupadd devops
-mkdir -p /share
-chown root:devops /share
-chmod 2775 /share
+# Verificar perfil ativo
+tuned-adm active
 
-# Verifique:
-ls -ld /share  # Deve mostrar: drwxrwsr-x`,
-                solucao: `1. groupadd devops
-2. mkdir /share
-3. chown root:devops /share
-4. chmod 2775 /share (SGID)
-5. Verifique: ls -ld /share
-6. Deve mostrar: drwxrwsr-x`,
-                verificacoes: ["groupadd devops", "mkdir /share", "chown root:devops", "chmod 2775", "ls -ld", "drwxrwsr-x"]
+# Verificar configuração
+tuned-adm list`,
+                solucao: `1. Instale tuned: yum install tuned* -y
+2. systemctl enable --now tuned
+3. Veja perfil recomendado: tuned-adm recommend
+4. Aplique: tuned-adm profile [perfil_recomendado]
+5. Verifique: tuned-adm active`,
+                verificacoes: ["yum install tuned", "systemctl enable tuned", "tuned-adm recommend", "tuned-adm profile", "tuned-adm active"]
             }
         ];
 
         // ==================== SISTEMA DE PROGRESSO ====================
-        let progresso = JSON.parse(localStorage.getItem('rhcsa-progresso')) || {};
-        let tentativas = JSON.parse(localStorage.getItem('rhcsa-tentativas')) || {};
+        let progresso = JSON.parse(localStorage.getItem('rhcsa-v10-progresso')) || {};
+        let tentativas = JSON.parse(localStorage.getItem('rhcsa-v10-tentativas')) || {};
         let questaoAtual = null;
         let comandosExecutados = [];
 
@@ -1177,13 +1299,11 @@ ls -ld /share  # Deve mostrar: drwxrwsr-x`,
             // Obter filtros
             const filtroNode = document.getElementById('filtroNode').value;
             const filtroDificuldade = document.getElementById('filtroDificuldade').value;
-            const filtroTopico = document.getElementById('filtroTopico').value;
             
             // Filtrar questões
             const filtradas = questoes.filter(q => {
                 return (filtroNode === 'all' || q.node == filtroNode) &&
-                       (filtroDificuldade === 'all' || q.dificuldade === filtroDificuldade) &&
-                       (filtroTopico === 'all' || q.topico === filtroTopico);
+                       (filtroDificuldade === 'all' || q.dificuldade === filtroDificuldade);
             });
             
             // Gerar HTML
@@ -1191,7 +1311,7 @@ ls -ld /share  # Deve mostrar: drwxrwsr-x`,
             filtradas.forEach(questao => {
                 const concluida = progresso[questao.id] || false;
                 const classeConcluida = concluida ? 'questao-concluida' : '';
-                const dificuldadeClass = `dificuldade-${questao.dificuldade.toLowerCase().replace('á', 'a').replace('í', 'i')}`;
+                const nodeClass = questao.node === 1 ? 'node1-badge' : 'node2-badge';
                 
                 html += `
                 <div class="col-md-6 col-lg-4 fade-in">
@@ -1200,9 +1320,9 @@ ls -ld /share  # Deve mostrar: drwxrwsr-x`,
                             <div class="questao-header">
                                 <div>
                                     <h5 class="mb-1">${concluida ? '<i class="fas fa-check-circle text-success"></i>' : '<i class="fas fa-clock text-secondary"></i>'} Questão ${questao.id}</h5>
-                                    <small class="questao-id">Node ${questao.node} • ${questao.topico}</small>
+                                    <small class="questao-id"><span class="node-badge ${nodeClass}">Node ${questao.node}</span> • ${questao.topico}</small>
                                 </div>
-                                <span class="dificuldade ${dificuldadeClass}">${questao.dificuldade}</span>
+                                <span class="badge ${questao.dificuldade === 'Fácil' ? 'bg-success' : questao.dificuldade === 'Médio' ? 'bg-warning' : 'bg-danger'}">${questao.dificuldade}</span>
                             </div>
                             
                             <h6 class="text-primary">${questao.titulo}</h6>
@@ -1379,8 +1499,7 @@ ls -ld /share  # Deve mostrar: drwxrwsr-x`,
                 // Mostrar instruções
                 adicionarSaidaTerminal(`🧪 TESTANDO QUESTÃO ${questaoAtual.id}: ${questaoAtual.titulo}`, 'info');
                 adicionarSaidaTerminal(`📋 Descrição: ${questaoAtual.descricao.substring(0, 100)}...`, 'info');
-                adicionarSaidaTerminal(`💡 Comando sugerido: ${questaoAtual.comando.substring(0, 100)}...`, 'info');
-                adicionarSaidaTerminal(`🚀 Execute os comandos acima para praticar.`, 'info');
+                adicionarSaidaTerminal(`💡 Execute os comandos para praticar.`, 'info');
                 adicionarSaidaTerminal(`✅ Depois use "Verificar Solução" para testar.`, 'info');
             }, 300);
         }
@@ -1388,7 +1507,7 @@ ls -ld /share  # Deve mostrar: drwxrwsr-x`,
         function marcarComoConcluida(id) {
             // Salvar no localStorage
             progresso[id] = true;
-            localStorage.setItem('rhcsa-progresso', JSON.stringify(progresso));
+            localStorage.setItem('rhcsa-v10-progresso', JSON.stringify(progresso));
             
             // Fechar modal
             const modal = bootstrap.Modal.getInstance(document.getElementById('modalQuestao'));
@@ -1412,36 +1531,52 @@ ls -ld /share  # Deve mostrar: drwxrwsr-x`,
             // Comandos básicos
             'whoami': 'root',
             
-            'hostnamectl': `Static hostname: rhcsa-lab
+            'hostnamectl': `Static hostname: node1.lab.example.com
        Icon name: computer-vm
          Chassis: vm
       Machine ID: 1234567890abcdef
          Boot ID: abcdef1234567890
   Virtualization: kvm
-Operating System: Red Hat Enterprise Linux 9.0 (Plow)
+Operating System: Red Hat Enterprise Linux 9.0
           Kernel: Linux 5.14.0-162.6.1.el9_1.x86_64
     Architecture: x86-64`,
             
-            'hostnamectl set-hostname Machine1.example.com': 'Hostname set to Machine1.example.com',
+            'hostnamectl set-hostname node1.lab.example.com': 'Hostname set to node1.lab.example.com',
             
-            'ip addr show': `1: lo: <LOOPBACK,UP,LOWER_UP> mtu 65536 qdisc noqueue state UNKNOWN group default qlen 1000
+            'ip addr show': `1: lo: <LOOPBACK,UP,LOWER_UP> mtu 65536 qdisc noqueue state UNKNOWN
     link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
     inet 127.0.0.1/8 scope host lo
        valid_lft forever preferred_lft forever
-2: eth0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc fq_codel state UP group default qlen 1000
+2: eth0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc fq_codel state UP
     link/ether 52:54:00:12:34:56 brd ff:ff:ff:ff:ff:ff
-    inet 192.168.76.20/24 brd 192.168.76.255 scope global eth0
+    inet 10.129.203.120/24 brd 10.129.203.255 scope global eth0
        valid_lft forever preferred_lft forever`,
             
-            'nmcli connection modify eth0 ipv4.addresses 192.168.76.20/24': 'Connection eth0 modified successfully.',
+            'systemctl status httpd': `● httpd.service - The Apache HTTP Server
+   Loaded: loaded (/usr/lib/systemd/system/httpd.service; enabled)
+   Active: active (running) since Mon 2024-01-01 10:00:00 UTC; 1h ago
+ Main PID: 1234 (httpd)
+    Tasks: 213
+   Memory: 25.3M
+   CGroup: /system.slice/httpd.service
+           ├─1234 /usr/sbin/httpd -DFOREGROUND
+           └─1235 /usr/sbin/httpd -DFOREGROUND`,
             
-            'nmcli connection modify eth0 ipv4.gateway 192.168.76.2': 'Connection eth0 modified successfully.',
+            'getenforce': 'Enforcing',
             
-            'nmcli connection modify eth0 ipv4.dns 192.168.76.2': 'Connection eth0 modified successfully.',
+            'semanage port -l | grep http': `http_cache_port_t              tcp      8080, 8118, 8123, 10001-10010
+http_port_t                    tcp      80, 81, 443, 488, 8008, 8009, 8443, 82
+pegasus_http_port_t            tcp      5988
+pegasus_https_port_t           tcp      5989`,
             
-            'nmcli connection modify eth0 ipv4.method manual': 'Connection eth0 modified successfully.',
+            'chronyc sources -v': `210 Number of sources = 1
+MS Name/IP address         Stratum Poll Reach LastRx Last sample
+===============================================================================
+^* classroom.example.com         2   6    37    32   +124us[ -130us] +/-   22ms`,
             
-            'systemctl restart NetworkManager': 'NetworkManager restarted successfully.',
+            'tuned-adm recommend': 'virtual-guest',
+            
+            'tuned-adm active': 'Current active profile: virtual-guest',
             
             'lsblk': `NAME   MAJ:MIN RM  SIZE RO TYPE MOUNTPOINT
 sda      8:0    0   20G  0 disk
@@ -1450,178 +1585,98 @@ sda      8:0    0   20G  0 disk
   ├─rhel-root 253:0    0   17G  0 lvm  /
   └─rhel-swap 253:1    0    2G  0 lvm  [SWAP]
 sdb      8:16   0   10G  0 disk
-└─sdb1   8:17   0   10G  0 part
-sdc      8:32   0    5G  0 disk
-└─sdc1   8:33   0    5G  0 part
-sde      8:64   0    5G  0 disk
-└─sde1   8:65   0    5G  0 part`,
-            
-            'fdisk /dev/sdb': `Welcome to fdisk (util-linux 2.37.4).
-Changes will remain in memory only, until you decide to write them.
-Be careful before using the write command.
-
-Command (m for help): `,
-            
-            'pvcreate /dev/sdb1': 'Physical volume "/dev/sdb1" successfully created.',
-            
-            'vgcreate vgdata /dev/sdb1': 'Volume group "vgdata" successfully created.',
-            
-            'lvcreate -L 500M -n lvdata vgdata': 'Logical volume "lvdata" created.',
-            
-            'mkfs.xfs /dev/vgdata/lvdata': `meta-data=/dev/vgdata/lvdata   isize=512    agcount=4, agsize=32000 blks
-         =                       sectsz=512   attr=2, projid32bit=1
-         =                       crc=1        finobt=1, sparse=1, rmapbt=0
-         =                       reflink=1
-data     =                       bsize=4096   blocks=128000, imaxpct=25
-         =                       sunit=0      swidth=0 blks
-naming   =version 2              bsize=4096   ascii-ci=0, ftype=1
-log      =internal log           bsize=4096   blocks=1366, version=2
-         =                       sectsz=512   sunit=0 blks, lazy-count=1
-realtime =none                   extsz=4096   blocks=0, rtextents=0`,
-            
-            'systemctl status httpd': `● httpd.service - The Apache HTTP Server
-   Loaded: loaded (/usr/lib/systemd/system/httpd.service; enabled; preset: disabled)
-   Active: active (running) since Mon 2024-01-01 10:00:00 UTC; 1h ago
- Main PID: 1234 (httpd)
-    Tasks: 213 (limit: 11336)
-   Memory: 25.3M
-   CGroup: /system.slice/httpd.service
-           ├─1234 /usr/sbin/httpd -DFOREGROUND
-           ├─1235 /usr/sbin/httpd -DFOREGROUND
-           └─1236 /usr/sbin/httpd -DFOREGROUND`,
-            
-            'getenforce': 'Enforcing',
-            
-            'firewall-cmd --add-port=82/tcp': 'success',
-            
-            'semanage port -a -t http_port_t -p tcp 82': 'Port 82 added to http_port_t.',
-            
-            'yum install httpd -y': `Last metadata expiration check: 0:01:23 ago
-Dependencies resolved.
-Package          Arch   Version          Repository      Size
-Installing:
- httpd           x86_64 2.4.53-7.el9     rhel-9-appstream 1.5 M
-Complete!`,
-            
-            'yum install podman -y': `Last metadata expiration check: 0:01:23 ago
-Dependencies resolved.
-Package          Arch   Version          Repository      Size
-Installing:
- podman          x86_64 4.2.0-2.el9      rhel-9-appstream 15 M
-Complete!`,
-            
-            'yum install tuned -y': `Last metadata expiration check: 0:01:23 ago
-Dependencies resolved.
-Package          Arch   Version          Repository      Size
-Installing:
- tuned           x86_64 2.18.0-1.el9     rhel-9-appstream 500 k
-Complete!`,
-            
-            'df -h': `Filesystem      Size  Used Avail Use% Mounted on
-/dev/sda2        19G  5.2G   14G  28% /
-/dev/sda1       976M  256M  653M  28% /boot
-tmpfs           1.9G     0  1.9G   0% /dev/shm
-/dev/mapper/vgdata-lvdata  500M   33M  468M   7% /mnt/data`,
+sdc      8:32   0    5G  0 disk`,
             
             'free -h': `              total        used        free      shared  buff/cache   available
 Mem:           3.9G        1.2G        1.5G         50M        1.2G        2.3G
 Swap:          2.0G          0B        2.0G`,
             
-            'ps aux | head -10': `USER       PID %CPU %MEM    VSZ   RSS TTY      STAT START   TIME COMMAND
-root         1  0.0  0.1 169316 13104 ?        Ss   10:00   0:01 /usr/lib/systemd/systemd
-root         2  0.0  0.0      0     0 ?        S    10:00   0:00 [kthreadd]
-root         3  0.0  0.0      0     0 ?        I<   10:00   0:00 [rcu_gp]`,
+            'swapon --show': `NAME      TYPE      SIZE USED PRIO
+/dev/sda2 partition   2G   0B   -2`,
             
-            'ls': `Desktop  Documents  Downloads  Music  Pictures  Public  Templates  Videos`,
+            'vgdisplay': `--- Volume group ---
+VG Name               rhel
+System ID             
+Format                lvm2
+Metadata Areas        1
+Metadata Sequence No  3
+VG Access             read/write
+VG Status             resizable
+MAX LV                0
+Cur LV                2
+Open LV               2
+Max PV                0
+Cur PV                1
+Act PV                1
+VG Size               <19.00 GiB
+PE Size               4.00 MiB
+Total PE              4863
+Alloc PE / Size       4863 / <19.00 GiB
+Free  PE / Size       0 / 0   
+VG UUID               abc123`,
             
-            'pwd': '/root',
+            'lvs': `LV   VG   Attr       LSize   Pool Origin Data%  Meta%  Move Log Cpy%Sync Convert
+root rhel -wi-ao----  17.00g                                                    
+swap rhel -wi-ao----   2.00g`,
             
-            'date': 'Mon Mar  1 10:30:00 UTC 2024',
-            
-            'uname -a': 'Linux rhcsa-lab 5.14.0-162.6.1.el9_1.x86_64 #1 SMP PREEMPT_DYNAMIC Wed Oct 4 15:00:00 EDT 2023 x86_64 x86_64 x86_64 GNU/Linux',
-            
-            'tar --gzip -cvf /root/etc_backup.tar.gz /etc': `tar: Removing leading '/' from member names
-/etc/
-/etc/fstab
-/etc/passwd
-/etc/group
-... (arquivos continuam)`,
-            
-            'find / -user tom -type f -exec cp -pvf {} /root/tomfiles/ \\;': `'/home/tom/file1.txt' -> '/root/tomfiles/file1.txt'
-'/home/tom/document.pdf' -> '/root/tomfiles/document.pdf'
-...`,
-            
-            'podman images': `REPOSITORY                  TAG      IMAGE ID       CREATED        SIZE
-image32                    latest   1234567890ab   2 hours ago   150MB`,
-            
-            'tuned-adm active': `Current active profile: virtual-guest`,
+            'flatpak list': `Name     Application ID                 Version         Branch         Origin
+codium   com.vscodium.codium            1.85.2.24015   stable         flatdb`,
             
             'help': `=== COMANDOS DISPONÍVEIS ===
 
-SISTEMA:
-  whoami                    - Mostra o usuário atual
-  hostnamectl              - Informações do sistema
-  hostnamectl set-hostname - Altera hostname
-  ip addr show             - Configuração de rede
-  lsblk                    - Dispositivos de armazenamento
-  df -h                    - Espaço em disco
-  free -h                  - Memória e swap
-  ps aux                   - Processos em execução
-  ls, pwd, date            - Comandos básicos
-  uname -a                 - Informações do kernel
-
 REDE:
-  nmcli connection modify  - Configura rede
-  systemctl restart NetworkManager - Reinicia rede
-  firewall-cmd             - Gerencia firewall
-  semanage port            - Gerencia portas SELinux
-
-STORAGE:
-  fdisk /dev/sdX           - Particiona disco
-  pvcreate                 - Cria volume físico LVM
-  vgcreate                 - Cria grupo de volumes
-  lvcreate                 - Cria volume lógico
-  mkfs.xfs                 - Formata com XFS
-  mkfs.ext4                - Formata com ext4
-
-SERVIÇOS:
-  systemctl status [serviço] - Status do serviço
-  systemctl restart [serviço] - Reinicia serviço
-  systemctl enable [serviço]  - Habilita no boot
-  getenforce            - Status SELinux
+  nmtui                    - Interface de configuração de rede
+  nmcli                    - Gerenciar rede via linha de comando
+  ip addr show             - Mostrar configuração de IP
 
 PACOTES:
-  yum install [pacote]   - Instala pacote
-  yum clean all          - Limpa cache
+  vim /etc/yum.repos.d/exam.repo - Editar repositórios
+  yum repolist all         - Listar repositórios
+  yum clean all            - Limpar cache
+
+SELINUX:
+  getenforce               - Ver status SELinux
+  semanage port -l | grep http - Ver portas HTTP
+  semanage port -a -t http_port_t -p tcp 82 - Adicionar porta
+
+FIREWALL:
+  firewall-cmd --list-all  - Listar regras
+  firewall-cmd --add-port=82/tcp - Abrir porta
+
+SERVIÇOS:
+  systemctl status httpd   - Status do Apache
+  systemctl restart httpd  - Reiniciar Apache
+  systemctl enable httpd   - Habilitar no boot
+
+STORAGE:
+  fdisk /dev/sdX           - Particionar disco
+  pvcreate /dev/sdX1       - Criar PV
+  vgcreate VGNAME /dev/sdX1 - Criar VG
+  lvcreate -L SIZE -n LVNAME VGNAME - Criar LV
+  lvresize -L SIZE /dev/VG/LV -r - Redimensionar LV
+  swapon --show            - Ver swaps ativas
 
 USUÁRIOS:
-  useradd [nome]         - Cria usuário
-  groupadd [nome]        - Cria grupo
-  usermod                - Modifica usuário
-  passwd [usuário]       - Altera senha
+  useradd -u UID USER      - Criar usuário com UID
+  groupadd GROUP           - Criar grupo
+  usermod -aG GROUP USER   - Adicionar usuário ao grupo
+  passwd USER              - Definir senha
 
-ARQUIVOS:
-  mkdir [diretório]      - Cria diretório
-  chown [user]:[group] [arquivo] - Altera proprietário
-  chmod [permissões] [arquivo] - Altera permissões
-  setfacl                - Configura ACL
-  tar --gzip -cvf        - Compacta arquivos
-  find                   - Busca arquivos
+AUTOMACAO:
+  crontab -e -u USER       - Editar cron do usuário
+  systemctl daemon-reload  - Recarregar systemd
+  systemctl enable --now UNIT.timer - Ativar timer
 
-CONTÊINERES:
-  podman images          - Lista imagens
-  podman build           - Constrói imagem
-  podman run             - Executa contêiner
-  podman login           - Login no registry
+FLATPAK:
+  flatpak remote-add --user --if-not-exists NOME URL - Adicionar repo
+  flatpak install --user NOME APP - Instalar app
 
-OUTROS:
-  tuned-adm              - Gerencia tuned profiles
-  crontab -e             - Edita cronjobs
-  clear                  - Limpa a tela
-  help                   - Mostra esta ajuda
-  exit                   - Volta às abas
+PERFORMANCE:
+  tuned-adm recommend      - Ver perfil recomendado
+  tuned-adm profile PERFIL - Aplicar perfil
+  tuned-adm active         - Ver perfil ativo
 
-💡 Para testar soluções, use o verificador na barra lateral.`
+💡 Use "clear" para limpar o terminal.`
         };
 
         function adicionarSaidaTerminal(texto, tipo = 'normal') {
@@ -1691,7 +1746,8 @@ OUTROS:
                 // Verificar comandos parciais
                 if (comando.includes('mkdir') || comando.includes('chmod') || comando.includes('chown') || 
                     comando.includes('useradd') || comando.includes('groupadd') || comando.includes('passwd') ||
-                    comando.includes('echo') || comando.includes('vim') || comando.includes('vi')) {
+                    comando.includes('echo') || comando.includes('vim') || comando.includes('vi') ||
+                    comando.includes('systemctl') || comando.includes('firewall-cmd') || comando.includes('yum')) {
                     adicionarSaidaTerminal(`Comando ${comando.split(' ')[0]} executado com sucesso.`, 'success');
                     encontrado = true;
                 }
@@ -1745,9 +1801,9 @@ OUTROS:
             
             // Registrar tentativa
             tentativas[questao.id] = (tentativas[questao.id] || 0) + 1;
-            localStorage.setItem('rhcsa-tentativas', JSON.stringify(tentativas));
+            localStorage.setItem('rhcsa-v10-tentativas', JSON.stringify(tentativas));
             
-            // Pegar últimos 10 comandos executados
+            // Pegar últimos 15 comandos executados
             const comandosRelevantes = comandosExecutados.slice(-15);
             
             // Verificar cada item de verificação
@@ -1778,7 +1834,7 @@ OUTROS:
             
             if (aprovado) {
                 progresso[questao.id] = true;
-                localStorage.setItem('rhcsa-progresso', JSON.stringify(progresso));
+                localStorage.setItem('rhcsa-v10-progresso', JSON.stringify(progresso));
                 
                 adicionarSaidaTerminal(`✅ PARABÉNS! Questão resolvida corretamente!`, 'success');
                 adicionarSaidaTerminal(`📝 Comandos verificados:`, 'info');
@@ -1806,8 +1862,8 @@ OUTROS:
                 });
                 
                 adicionarSaidaTerminal(`\n💡 DICA: Execute estes comandos para completar:`, 'hint');
-                const comandosSugeridos = questao.comando.split('\n').slice(0, 5);
-                comandosSugeridos.forEach(cmd => {
+                const linhasComando = questao.comando.split('\n').slice(0, 5);
+                linhasComando.forEach(cmd => {
                     if (cmd.trim() && !cmd.startsWith('#')) {
                         adicionarSaidaTerminal(`  ${cmd.substring(0, 80)}`, 'hint');
                     }
@@ -1857,8 +1913,7 @@ OUTROS:
                 <tr>
                     <td>${q.id}</td>
                     <td>${q.titulo}</td>
-                    <td>${q.node}</td>
-                    <td>${q.topico}</td>
+                    <td>Node ${q.node}</td>
                     <td>${status}</td>
                     <td>${tentativasCount}</td>
                     <td>
@@ -1889,16 +1944,16 @@ OUTROS:
                                     <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
                                 </div>
                                 <div class="modal-body text-center">
-                                    <h3>🎉 Você completou 100% do RHCSA Study Lab! 🎉</h3>
+                                    <h3>🎉 Você completou 100% do RHCSA V10 Exam Lab! 🎉</h3>
                                     <p class="lead">Todas as ${total} questões foram resolvidas com sucesso!</p>
                                     <div class="alert alert-info mt-3">
                                         <i class="fas fa-info-circle"></i>
-                                        Deseja resetar seu progresso e começar novamente?
+                                        Agora você está preparado para o exame real!
                                     </div>
                                 </div>
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-                                        <i class="fas fa-times"></i> Continuar
+                                        <i class="fas fa-times"></i> Fechar
                                     </button>
                                     <button type="button" class="btn btn-primary" onclick="resetarProgressoCompleto()">
                                         <i class="fas fa-redo"></i> Resetar Progresso
@@ -1928,8 +1983,8 @@ OUTROS:
             if (confirm('Tem certeza que deseja resetar todo o seu progresso? Todas as questões marcadas como concluídas serão perdidas.')) {
                 progresso = {};
                 tentativas = {};
-                localStorage.removeItem('rhcsa-progresso');
-                localStorage.removeItem('rhcsa-tentativas');
+                localStorage.removeItem('rhcsa-v10-progresso');
+                localStorage.removeItem('rhcsa-v10-tentativas');
                 comandosExecutados = [];
                 
                 adicionarSaidaTerminal('🔄 Progresso resetado com sucesso!', 'success');
@@ -1949,8 +2004,8 @@ OUTROS:
             
             progresso = {};
             tentativas = {};
-            localStorage.removeItem('rhcsa-progresso');
-            localStorage.removeItem('rhcsa-tentativas');
+            localStorage.removeItem('rhcsa-v10-progresso');
+            localStorage.removeItem('rhcsa-v10-tentativas');
             comandosExecutados = [];
             
             adicionarSaidaTerminal('🔄 Progresso resetado! Pronto para começar novamente!', 'success');
@@ -1976,7 +2031,7 @@ OUTROS:
         }
 
         document.addEventListener('DOMContentLoaded', function() {
-            console.log('Página carregada - RHCSA Study Lab');
+            console.log('Página carregada - RHCSA V10 Exam Lab');
             
             // Carregar questões
             carregarQuestoes();
@@ -1984,11 +2039,9 @@ OUTROS:
             // Configurar filtros
             document.getElementById('filtroNode').addEventListener('change', carregarQuestoes);
             document.getElementById('filtroDificuldade').addEventListener('change', carregarQuestoes);
-            document.getElementById('filtroTopico').addEventListener('change', carregarQuestoes);
             document.getElementById('btnResetFiltros').addEventListener('click', function() {
                 document.getElementById('filtroNode').value = 'all';
                 document.getElementById('filtroDificuldade').value = 'all';
-                document.getElementById('filtroTopico').value = 'all';
                 carregarQuestoes();
             });
             
@@ -2013,7 +2066,7 @@ OUTROS:
             atualizarProgresso();
             
             // Mensagem de boas-vindas
-            console.log('RHCSA Study Lab inicializado com sucesso!');
+            console.log('RHCSA V10 Exam Lab inicializado com sucesso!');
             console.log('Total de questões:', questoes.length);
         });
     </script>
